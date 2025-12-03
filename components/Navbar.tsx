@@ -25,14 +25,22 @@ const Navbar = () => {
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     const scrollToSection = (id: string) => {
-        const element = document.getElementById(id);
+        // Map clean names to section IDs
+        const sectionMap: { [key: string]: string } = {
+            'cómo-funciona': 'cómo-funciona',
+            'reseñas': 'reseñas',
+            'ventajas': 'beneficios',
+            'faq': 'faq'
+        };
+
+        const element = document.getElementById(sectionMap[id] || id);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
         setIsMenuOpen(false);
     };
 
-    const navItems = ['Cómo funciona', 'Beneficios', 'Comparativa', 'FAQ'];
+    const navItems = ['Cómo funciona', 'Reseñas', 'Ventajas', 'FAQ'];
 
     return (
         <>
@@ -52,10 +60,10 @@ const Navbar = () => {
             >
                 <div
                     className={cn(
-                        "flex justify-between items-center px-6 mx-auto",
+                        "flex items-center px-6 mx-auto",
                         scrolled
-                            ? "bg-white/80 backdrop-blur-md shadow-lg py-3 rounded-full border border-white/20"
-                            : "bg-[#163C2E] py-5 container"
+                            ? "bg-white/80 backdrop-blur-md shadow-lg py-3 rounded-full border border-white/20 justify-between"
+                            : "bg-[#163C2E] py-5 container justify-between"
                     )}
                     style={{
                         transition: 'background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease, border 0.3s ease'
@@ -95,7 +103,7 @@ const Navbar = () => {
                             </button>
                         ))}
                         <a
-                            href="#formulario"
+                            href="/calculadora"
                             className={cn(
                                 "px-5 py-2 rounded-full font-bold text-sm transition-all transform hover:scale-105 shadow-lg hover:shadow-xl",
                                 "bg-[#28A77D] text-white"
@@ -134,7 +142,7 @@ const Navbar = () => {
                                 </button>
                             ))}
                             <a
-                                href="#formulario"
+                                href="/calculadora"
                                 className="w-full text-center py-3 rounded-xl font-bold mt-2 bg-[#28A77D] text-white"
                             >
                                 Quiero mi casa
