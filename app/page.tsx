@@ -48,9 +48,9 @@ const LandingPage = () => {
                 Revolucionamos el acceso a la vivienda
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight mb-6">
-                Tu primera vivienda, <br />
+              Tu primera vivienda, <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#28A77D] to-emerald-300">
-                  sin la barrera del 30%
+                sin la barrera de la entrada
                 </span>
               </h1>
               <p className="text-lg lg:text-xl text-slate-300 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
@@ -199,9 +199,10 @@ const LandingPage = () => {
               </h2>
               <ul className="space-y-6">
                 {[
-                  "No tiras dinero en alquiler: Estás invirtiendo en tu propiedad.",
-                  "Intermediario integral: Coordinamos banco, comprador y gestión de alquiler.",
-                  "Seguridad Jurídica: Todo se firma ante notario."
+                  "Compras a precio de hoy, mientras el precio sigue subiendo.",
+                  "Sin comisiones ocultas: No cobramos al vendedor ni inflamos precios.",
+                  "Intermediario integral: Coordinamos banco, adelanto de rentas, comprador y gestión del alquiler.",
+                  "Compras sin tener que aportar enormes cantidades de dinero para la entrada."
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-4">
                     <div className="mt-1 p-1 bg-[#28A77D] rounded-full">
@@ -361,11 +362,12 @@ const LandingPage = () => {
 
           <div className="space-y-4">
             {[
-              { q: "¿Qué es Fórmula Hogar?", a: "Somos un intermediario financiero y operativo. Coordinamos al comprador, al banco y a los partners que adelantan las rentas. No somos una inmobiliaria tradicional." },
-              { q: "¿Soy propietario desde el primer día?", a: "Sí, absolutamente. Desde la firma en notaría la vivienda es tuya. Solo cedes el uso y el cobro del alquiler temporalmente para pagar tu entrada." },
-              { q: "¿Hay requisitos para acceder?", a: "Necesitas tener ingresos estables (capacidad de hipoteca futura) y disponer de un ahorro mínimo del 5% para los gastos de gestión iniciales." },
-              { q: "¿Cuándo puedo entrar a vivir?", a: "Una vez finaliza el periodo de cesión acordado (normalmente entre 2 y 3 años). La vivienda se te entrega en perfecto estado." },
-              { q: "¿Y si quiero vender mi casa actual?", a: "También te ayudamos. Te acompañamos sin coste y te ponemos en contacto con compradores que ya tienen financiación aprobada." }
+              { q: "¿Qué es Fórmula Hogar?", a: "Fórmula Hogar es una solución financiera-operativa, no una inmobiliaria. Combinamos hipoteca + adelanto de rentas + gestión del uso para que puedas comprar tu casa sin pagar la entrada, cediendo el uso durante unos años. Tú compras; un tercero usa tu vivienda temporalmente." },
+              { q: "¿Soy propietario desde el primer día?", a: "Sí. Desde que firmas en notaría, la vivienda es 100% tuya. Lo único que cedes temporalmente es el uso y el cobro del alquiler, que sirven para financiar tu entrada. Esta mecánica está explicada en el proceso operativo oficial de FH." },
+              { q: "¿Cuánto tiempo cedo el uso?", a: "Depende del dinero que necesites para cubrir la entrada, puedes elegir entre 1 y 5 años según tus intereses." },
+              { q: "¿Qué requisitos necesito?", a: "Solo dos: Ingresos estables para obtener hipoteca (capacidad real de pago). Un mínimo del 5% aprox. para cubrir los gastos iniciales de gestión (tasación, notaría, validaciones). " },
+              { q: "¿Puedo elegir la vivienda que quiero comprar?", a: "Sí. Tú eliges la vivienda y nuestro equipo valida que el precio sea coherente con la tasación bancaria y que la operación sea viable. FH no vende stock: te guiamos para que compres tu casa, no una que nos interese a nosotros. " },
+              { q: "¿Qué pasa si quiero vender mi vivienda actual?", a: "Te ayudamos sin coste. Tenemos compradores preaprobados capaces de cerrar rápido operaciones que suelen estar bloqueadas por falta de entrada." }
             ].map((faq, idx) => (
               <details key={idx} className="group bg-slate-50 rounded-xl p-4 cursor-pointer [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex items-center justify-between font-bold text-[#163C2E] group-hover:text-[#28A77D] transition-colors">
