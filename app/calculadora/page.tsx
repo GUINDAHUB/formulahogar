@@ -42,6 +42,36 @@ interface FormData {
     age: number;
 }
 
+const AnimatedNumber = ({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) => {
+    const [displayValue, setDisplayValue] = useState(0);
+
+    useEffect(() => {
+        setDisplayValue(0); // Reset to 0 when value changes to restart animation
+        const duration = 1200;
+        const steps = 50;
+        const increment = value / steps;
+        let current = 0;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= value) {
+                setDisplayValue(value);
+                clearInterval(timer);
+            } else {
+                setDisplayValue(Math.floor(current));
+            }
+        }, duration / steps);
+
+        return () => clearInterval(timer);
+    }, [value]);
+
+    return (
+        <span>
+            {prefix}{displayValue.toLocaleString('es-ES')}{suffix}
+        </span>
+    );
+};
+
 const CalculadoraPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<FormData>({
@@ -61,6 +91,7 @@ const CalculadoraPage = () => {
     
     const [showCelebration, setShowCelebration] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
         // Sync phone parts to formData
@@ -213,7 +244,8 @@ const CalculadoraPage = () => {
             });
 
             if (response.ok) {
-                alert(`¡Gracias ${formData.name}! Hemos recibido tu solicitud correctamente.`);
+                setIsSuccess(true);
+                setShowCelebration(true);
             } else {
                 alert("Hubo un error al enviar la información. Por favor, inténtalo de nuevo.");
             }
@@ -255,35 +287,8 @@ const CalculadoraPage = () => {
         }
     };
 
-    // Animated Number Component
-    const AnimatedNumber = ({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) => {
-        const [displayValue, setDisplayValue] = useState(0);
+    // Animated Number Component moved outside
 
-        useEffect(() => {
-            const duration = 1200;
-            const steps = 50;
-            const increment = value / steps;
-            let current = 0;
-
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= value) {
-                    setDisplayValue(value);
-                    clearInterval(timer);
-                } else {
-                    setDisplayValue(Math.floor(current));
-                }
-            }, duration / steps);
-
-            return () => clearInterval(timer);
-        }, [value]);
-
-        return (
-            <span>
-                {prefix}{displayValue.toLocaleString('es-ES')}{suffix}
-            </span>
-        );
-    };
 
     // Helper to format display values (divides by 2 if partner)
     const getDisplayValue = (value: number) => {
@@ -306,37 +311,39 @@ const CalculadoraPage = () => {
             </header>
 
             {/* Compact Progress Bar */}
-            <div className="bg-white border-b border-slate-100 flex-shrink-0">
-                <div className="container mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-center">
-                    <div className="flex items-center justify-center max-w-2xl w-full gap-4">
-                        {[1, 2, 3, 4].map((step) => (
-                            <div key={step} className="flex items-center flex-1 last:flex-none">
-                                <div className="flex flex-col items-center">
-                                    <div
-                                        className={`w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center font-bold text-xs md:text-sm transition-all duration-500 ${step < currentStep
-                                            ? 'bg-[#28A77D] text-white'
-                                            : step === currentStep
-                                                ? 'bg-[#163C2E] text-white scale-110 shadow-lg'
-                                                : 'bg-slate-200 text-slate-400'
-                                            }`}
-                                    >
-                                        {step < currentStep ? <CheckCircle className="w-4 h-4" /> : step}
+            {!isSuccess && (
+                <div className="bg-white border-b border-slate-100 flex-shrink-0">
+                    <div className="container mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-center">
+                        <div className="flex items-center justify-center max-w-2xl w-full gap-4">
+                            {[1, 2, 3, 4].map((step) => (
+                                <div key={step} className="flex items-center flex-1 last:flex-none">
+                                    <div className="flex flex-col items-center">
+                                        <div
+                                            className={`w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center font-bold text-xs md:text-sm transition-all duration-500 ${step < currentStep
+                                                ? 'bg-[#28A77D] text-white'
+                                                : step === currentStep
+                                                    ? 'bg-[#163C2E] text-white scale-110 shadow-lg'
+                                                    : 'bg-slate-200 text-slate-400'
+                                                }`}
+                                        >
+                                            {step < currentStep ? <CheckCircle className="w-4 h-4" /> : step}
+                                        </div>
+                                        <span className={`text-[10px] md:text-xs mt-1 font-medium whitespace-nowrap ${step === currentStep ? 'text-[#163C2E]' : 'text-slate-400'}`}>
+                                            {step === 1 && 'Datos'}
+                                            {step === 2 && 'Vivienda'}
+                                            {step === 3 && 'Resultados'}
+                                            {step === 4 && 'Acción'}
+                                        </span>
                                     </div>
-                                    <span className={`text-[10px] md:text-xs mt-1 font-medium whitespace-nowrap ${step === currentStep ? 'text-[#163C2E]' : 'text-slate-400'}`}>
-                                        {step === 1 && 'Datos'}
-                                        {step === 2 && 'Vivienda'}
-                                        {step === 3 && 'Resultados'}
-                                        {step === 4 && 'Acción'}
-                                    </span>
+                                    {step < 4 && (
+                                        <div className={`flex-1 h-0.5 mx-2 md:mx-4 transition-all duration-500 ${step < currentStep ? 'bg-[#28A77D]' : 'bg-slate-200'}`} />
+                                    )}
                                 </div>
-                                {step < 4 && (
-                                    <div className={`flex-1 h-0.5 mx-2 md:mx-4 transition-all duration-500 ${step < currentStep ? 'bg-[#28A77D]' : 'bg-slate-200'}`} />
-                                )}
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Main Content - Scrollable with flex-1 */}
             <main className="flex-1 overflow-y-auto">
@@ -347,12 +354,33 @@ const CalculadoraPage = () => {
                         {showCelebration && (
                             <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
                                 <div className="animate-ping absolute w-24 h-24 rounded-full bg-[#28A77D] opacity-20"></div>
-                                <Sparkles className="w-12 h-12 text-[#28A77D] animate-bounce" />
                             </div>
                         )}
 
-                        {/* Step 1: Personal Information */}
-                        {currentStep === 1 && (
+                        {/* Success Message */}
+                        {isSuccess ? (
+                            <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-slate-100 animate-fade-in flex-1 flex flex-col items-center justify-center text-center">
+                                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+                                    <CheckCircle className="w-10 h-10 text-[#28A77D]" />
+                                </div>
+                                <h1 className="text-3xl md:text-4xl font-bold text-[#163C2E] mb-4">
+                                    ¡Gracias, {formData.name.split(' ')[0]}!
+                                </h1>
+                                <p className="text-lg text-slate-600 mb-8 max-w-md">
+                                    Hemos recibido tu solicitud correctamente. Uno de nuestros expertos analizará tu caso y te contactará muy pronto.
+                                </p>
+                                <Link
+                                    href="/"
+                                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#163C2E] text-white font-bold text-lg rounded-xl hover:bg-[#28A77D] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+                                >
+                                    <Home className="w-5 h-5" />
+                                    Volver al inicio
+                                </Link>
+                            </div>
+                        ) : (
+                            <>
+                                {/* Step 1: Personal Information */}
+                                {currentStep === 1 && (
                             <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100 animate-fade-in flex-1 flex flex-col">
                                 <div className="text-center mb-4 md:mb-6">
                                     <div className="inline-flex items-center gap-2 bg-[#28A77D]/10 text-[#28A77D] px-3 py-1.5 rounded-full text-xs font-bold mb-3">
@@ -628,7 +656,6 @@ const CalculadoraPage = () => {
 
                                     {/* Savings */}
                                     <div className="bg-gradient-to-br from-[#163C2E] to-[#28A77D] rounded-xl p-5 text-white text-center">
-                                        <Sparkles className="w-8 h-8 mx-auto mb-2 text-yellow-300" />
                                         <p className="text-xs opacity-90 mb-1">
                                             Ahorras en entrada{formData.buyingWith === 'partner' ? ' (por persona)' : ''}
                                         </p>
@@ -641,19 +668,9 @@ const CalculadoraPage = () => {
                                     </div>
 
                                     {/* Info */}
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div className="bg-slate-50 rounded-xl p-3">
-                                            <p className="text-[9px] text-slate-500 uppercase font-bold mb-0.5">
-                                                Cuota mensual{formData.buyingWith === 'partner' ? ' / persona' : ''}
-                                            </p>
-                                            <p className="text-lg md:text-xl font-bold text-[#163C2E]">
-                                                ~{Math.floor(getDisplayValue(monthlyPayment)).toLocaleString('es-ES')}€
-                                            </p>
-                                        </div>
-                                        <div className="bg-slate-50 rounded-xl p-3">
-                                            <p className="text-[9px] text-slate-500 uppercase font-bold mb-0.5">Cesión</p>
-                                            <p className="text-lg md:text-xl font-bold text-[#163C2E]">{months} meses</p>
-                                        </div>
+                                    <div className="bg-slate-50 rounded-xl p-3 text-center">
+                                        <p className="text-[9px] text-slate-500 uppercase font-bold mb-0.5">Cesión</p>
+                                        <p className="text-lg md:text-xl font-bold text-[#163C2E]">{months} meses</p>
                                     </div>
                                 </div>
                             </div>
@@ -756,6 +773,8 @@ const CalculadoraPage = () => {
                                 </Link>
                             </div>
                         )}
+                        </>
+                    )}
                     </div>
                 </div>
             </main>
