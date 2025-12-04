@@ -4,7 +4,7 @@ import "@mux/mux-player/themes/minimal";
 import { Users, Wallet, Key, Home } from 'lucide-react';
 
 const VideoSection = () => {
-  const PLAYBACK_ID = 'czeaHqPGSfWr8YI5GlkdkyGrtCfOGyPDIR28C27q9Ds';
+  const PLAYBACK_ID = '02LkyVlxls01u2OFEyVqk00ZLuMVNM9FxaBtAfSNQcVr02g';
 
   const steps = [
     {
