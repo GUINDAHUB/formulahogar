@@ -53,7 +53,7 @@ const Navbar = () => {
                 className={cn(
                     "fixed z-50 left-0 right-0 mx-auto",
                     scrolled
-                        ? "top-4 w-[90%] md:w-[70%] lg:w-[50%] rounded-full"
+                        ? "top-4 w-[95%] md:w-[95%] lg:w-[85%] xl:w-[70%] rounded-full"
                         : "top-0 w-full"
                 )}
                 style={{
@@ -91,7 +91,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Menu */}
-                    <div className="hidden md:flex items-center gap-6">
+                    <div className="hidden md:flex items-center gap-4 lg:gap-6">
                         {navItems.map((item) => (
                             <button
                                 key={item}

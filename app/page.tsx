@@ -40,7 +40,7 @@ const LandingPage = () => {
       <Navbar />
 
       {/* --- HERO SECTION --- */}
-      <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden" style={{ backgroundColor: colors.darkGreen }}>
+      <header className="relative pt-32 pb-20 lg:pt-40 lg:pb-16 overflow-hidden" style={{ backgroundColor: colors.darkGreen }}>
         {/* Background decorative elements */}
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none"></div>
 
@@ -80,12 +80,18 @@ const LandingPage = () => {
 
               <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-400">
                 <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full bg-slate-600 border-2 border-[#163C2E] flex items-center justify-center text-xs font-bold text-white">
-                      {/* Placeholder avatars */}
-                      <Users className="w-4 h-4" />
+                    <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
+                      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" className="w-full h-full object-cover" />
                     </div>
-                  ))}
+                    <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
+                      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
+                      <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Usuario" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
+                      <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Usuario" className="w-full h-full object-cover" />
+                    </div>
                 </div>
                 <p>Más de <span className="text-white font-bold">500+</span> propietarios felices</p>
               </div>
