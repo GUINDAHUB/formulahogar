@@ -13,6 +13,7 @@ import Navbar from '@/components/Navbar';
 import LogoSlider from '@/components/LogoSlider';
 import ReviewsSlider from '@/components/ReviewsSlider';
 import VideoSection from '@/components/VideoSection';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const LandingPage = () => {
   const colors = {
@@ -421,6 +422,7 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
+      <SpeedInsights />
     </div>
   );
 };
