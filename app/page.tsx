@@ -14,6 +14,7 @@ import LogoSlider from '@/components/LogoSlider';
 import ReviewsSlider from '@/components/ReviewsSlider';
 import VideoSection from '@/components/VideoSection';
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const LandingPage = () => {
   const colors = {
@@ -25,12 +26,14 @@ const LandingPage = () => {
     textLight: '#94A3B8'
   };
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = (id: string, event: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    sendGTMEvent({ event: 'buttonClicked', value: event })
   };
+
 
   return (
     <div className="font-sans antialiased text-slate-800 bg-white selection:bg-[#28A77D] selection:text-white">
@@ -68,7 +71,7 @@ const LandingPage = () => {
                   <ArrowRight className="w-5 h-5" />
                 </a>
                 <button
-                  onClick={() => scrollToSection('cómo-funciona')}
+                  onClick={() => scrollToSection('cómo-funciona', 'como-funciona')}
                   className="px-8 py-4 rounded-xl font-bold text-lg border border-white/20 text-white hover:bg-white/5 transition-all"
                 >
                   Ver cómo funciona
@@ -422,7 +425,6 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
-      <SpeedInsights />
     </div>
   );
 };

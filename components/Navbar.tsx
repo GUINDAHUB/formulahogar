@@ -5,6 +5,7 @@ import { Home, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { sendGTMEvent } from '@next/third-parties/google'
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -24,7 +25,7 @@ const Navbar = () => {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-    const scrollToSection = (id: string) => {
+    const scrollToSection = (id: string, event: string) => {
         // Map clean names to section IDs
         const sectionMap: { [key: string]: string } = {
             'cómo-funciona': 'cómo-funciona',
@@ -38,6 +39,7 @@ const Navbar = () => {
             element.scrollIntoView({ behavior: 'smooth' });
         }
         setIsMenuOpen(false);
+        sendGTMEvent({ event: 'buttonClicked', value: event })
     };
 
     const navItems = ['Cómo funciona', 'Reseñas', 'Ventajas', 'FAQ'];
@@ -93,7 +95,7 @@ const Navbar = () => {
                         {navItems.map((item) => (
                             <button
                                 key={item}
-                                onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
+                                onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'), item.toLowerCase().replace(' ', '-') + '-menu')}
                                 className={cn(
                                     "text-sm font-medium hover:text-[#28A77D] transition-colors",
                                     scrolled ? "text-slate-600" : "text-slate-300"
@@ -135,7 +137,7 @@ const Navbar = () => {
                             {navItems.map((item) => (
                                 <button
                                     key={item}
-                                    onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
+                                    onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'), item.toLowerCase().replace(' ', '-') + '-menu')}
                                     className="text-left text-lg font-medium text-slate-700"
                                 >
                                     {item}

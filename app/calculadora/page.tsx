@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Home, ArrowRight, ArrowLeft, CheckCircle, TrendingDown, Sparkles, Users, Phone, Mail, MapPin, Calendar, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 // Autonomous communities in Spain
 const COMUNIDADES = [
@@ -244,6 +245,11 @@ const CalculadoraPage = () => {
             });
 
             if (response.ok) {
+                // Track form submission
+                sendGTMEvent({
+                    event: 'calculator_form_submitted'
+                });
+                
                 setIsSuccess(true);
                 setShowCelebration(true);
             } else {
@@ -259,6 +265,12 @@ const CalculadoraPage = () => {
 
     const nextStep = () => {
         if (currentStep < totalSteps) {
+            // GTM Events
+            sendGTMEvent({
+                event: `calculator_step_${currentStep}_complete`,
+                step_completed: currentStep.toString()
+            });
+
             setCurrentStep(currentStep + 1);
             if (currentStep === 2) {
                 // Show celebration when entering results
