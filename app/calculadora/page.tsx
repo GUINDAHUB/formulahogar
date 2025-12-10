@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { Home, ArrowRight, ArrowLeft, CheckCircle, TrendingDown, Sparkles, Users, Phone, Mail, MapPin, Calendar, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { sendGTMEvent } from '@next/third-parties/google';
+import { calculateResults } from '@/utils/calculator';
 
 // Autonomous communities in Spain
 const COMUNIDADES = [
@@ -30,7 +32,11 @@ const isValidEmail = (email: string) => {
 const isValidPhone = (phone: string) => {
     // Remove spaces and non-digits for check
     const digits = phone.replace(/\D/g, '');
-    return digits.length >= 9; // Basic international validation
+    // For Spain, mobile numbers start with 6 or 7 and are 9 digits long
+    // If not strict Spanish check, keep generic length check.
+    // User requested Spanish check: starts with 6 or 7.
+    // Assuming 9 digits is standard for Spain.
+    return /^[67]\d{8}$/.test(digits);
 };
 
 interface FormData {
@@ -41,6 +47,8 @@ interface FormData {
     community: string;
     buyingWith: 'alone' | 'partner';
     age: number;
+    salary: string;
+    employmentStatus: string;
 }
 
 const AnimatedNumber = ({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) => {
@@ -74,6 +82,7 @@ const AnimatedNumber = ({ value, prefix = '', suffix = '' }: { value: number; pr
 };
 
 const CalculadoraPage = () => {
+    const router = useRouter();
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -82,7 +91,9 @@ const CalculadoraPage = () => {
         price: 200000,
         community: '',
         buyingWith: 'alone',
-        age: 30
+        age: 30,
+        salary: '',
+        employmentStatus: ''
     });
     
     const [phonePrefix, setPhonePrefix] = useState('+34');
@@ -111,106 +122,14 @@ const CalculadoraPage = () => {
         textLight: '#94A3B8'
     };
 
-    const totalSteps = 4;
+    const totalSteps = 3;
 
-    // Constants from Python algorithm
-    const TASAS_ITP: Record<string, number> = {
-        "Andalucía": 0.07,
-        "Aragón": 0.09,
-        "Asturias": 0.09,
-        "Islas Baleares": 0.11,
-        "Canarias": 0.065,
-        "Cantabria": 0.09,
-        "Castilla-La Mancha": 0.09,
-        "Castilla y León": 0.09,
-        "Cataluña": 0.11,
-        "Ceuta": 0.06,
-        "Madrid": 0.06,
-        "Comunidad Valenciana": 0.11,
-        "Extremadura": 0.10,
-        "Galicia": 0.08,
-        "La Rioja": 0.07,
-        "Melilla": 0.06,
-        "Murcia": 0.08,
-        "Navarra": 0.06,
-        "País Vasco": 0.07
-    };
-
-    const COSTES_FIJOS = {
-        NOTARIA: 0.01,
-        COMISION: 0.03
-    };
-
-    const TABLA_ADELANTOS: Record<number, number> = {
-        12: 0.80,
-        24: 0.70,
-        36: 0.70,
-        48: 0.65,
-        60: 0.60
-    };
-
-    const RENTABILIDAD_BRUTA = 0.05;
-
-    // Calculate results
-    const calculateResults = () => {
-        const tasaItp = TASAS_ITP[formData.community] || 0.06;
-        
-        // Base calculations
-        const porcentajeGastosTotal = tasaItp + COSTES_FIJOS.NOTARIA + COSTES_FIJOS.COMISION;
-        const precioTotal = formData.price * (1 + porcentajeGastosTotal);
-        
-        // Bank Entry (Depends on age)
-        const porcentajeEntradaBanco = formData.age < 30 ? 0.10 : 0.20;
-        const entradaBanco = precioTotal * porcentajeEntradaBanco;
-
-        // Rentabilidad
-        const rentabilidadBrutaAlquiler = formData.price * RENTABILIDAD_BRUTA;
-        const rentabilidadMensual = rentabilidadBrutaAlquiler / 12;
-        const garantia = rentabilidadMensual;
-
-        // Optimization Algorithm
-        let mejorOpcion = null;
-        let menorEntradaEncontrada = Infinity;
-        const listaOpciones = [12, 24, 36, 48, 60];
-
-        for (const meses of listaOpciones) {
-            const coeficiente = TABLA_ADELANTOS[meses];
-            const adelantoCalc = (meses * coeficiente * rentabilidadMensual) - garantia;
-            const entradaFhCalc = entradaBanco - adelantoCalc;
-
-            if (entradaFhCalc >= 0) {
-                if (entradaFhCalc < menorEntradaEncontrada) {
-                    menorEntradaEncontrada = entradaFhCalc;
-                    mejorOpcion = {
-                        meses,
-                        adelanto: adelantoCalc,
-                        entradaFh: entradaFhCalc
-                    };
-                }
-            }
-        }
-
-        // Fallback
-        if (!mejorOpcion) {
-            const meses = 12;
-            const adelantoCalc = (meses * TABLA_ADELANTOS[meses] * rentabilidadMensual) - garantia;
-            mejorOpcion = {
-                meses,
-                adelanto: adelantoCalc,
-                entradaFh: entradaBanco - adelantoCalc
-            };
-        }
-
-        return {
-            traditionalDownPayment: Math.round(entradaBanco),
-            formulaHogarDownPayment: Math.round(mejorOpcion.entradaFh),
-            savings: Math.round(entradaBanco - mejorOpcion.entradaFh),
-            monthlyPayment: Math.round(rentabilidadMensual),
-            months: mejorOpcion.meses
-        };
-    };
-
-    const { traditionalDownPayment, formulaHogarDownPayment, savings, monthlyPayment, months } = calculateResults();
+    // Calculate results using the utility function (for internal use if needed, but mainly for passing to thank you page)
+    const { traditionalDownPayment, formulaHogarDownPayment, savings, monthlyPayment, months } = calculateResults({
+        price: formData.price,
+        community: formData.community,
+        age: formData.age
+    });
 
     const sendToWebhook = async () => {
         setIsSubmitting(true);
@@ -252,6 +171,17 @@ const CalculadoraPage = () => {
                 
                 setIsSuccess(true);
                 setShowCelebration(true);
+                
+                // Save data to sessionStorage for the Thank You page
+                sessionStorage.setItem('fh_calculator_data', JSON.stringify({
+                    price: formData.price,
+                    community: formData.community,
+                    age: formData.age,
+                    buyingWith: formData.buyingWith
+                }));
+
+                // Redirect to Thank You page without params
+                router.push('/gracias');
             } else {
                 alert("Hubo un error al enviar la información. Por favor, inténtalo de nuevo.");
             }
@@ -264,19 +194,17 @@ const CalculadoraPage = () => {
     };
 
     const nextStep = () => {
-        if (currentStep < totalSteps) {
-            // GTM Events
-            sendGTMEvent({
-                event: `calculator_step_${currentStep}_complete`,
-                step_completed: currentStep.toString()
-            });
+        // GTM Events
+        sendGTMEvent({
+            event: `calculator_step_${currentStep}_complete`,
+            step_completed: currentStep.toString()
+        });
 
+        if (currentStep === totalSteps) {
+            // Submit when finishing the last step (step 3)
+            sendToWebhook();
+        } else if (currentStep < totalSteps) {
             setCurrentStep(currentStep + 1);
-            if (currentStep === 2) {
-                // Show celebration when entering results
-                setShowCelebration(true);
-                setTimeout(() => setShowCelebration(false), 2000);
-            }
         }
     };
 
@@ -294,6 +222,8 @@ const CalculadoraPage = () => {
                        isValidPhone(phoneInput);
             case 2:
                 return formData.community && formData.age > 0;
+            case 3:
+                return formData.salary !== '' && formData.employmentStatus !== '';
             default:
                 return true;
         }
@@ -327,7 +257,7 @@ const CalculadoraPage = () => {
                 <div className="bg-white border-b border-slate-100 flex-shrink-0">
                     <div className="container mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-center">
                         <div className="flex items-center justify-center max-w-2xl w-full gap-4">
-                            {[1, 2, 3, 4].map((step) => (
+                            {[1, 2, 3].map((step) => (
                                 <div key={step} className="flex items-center flex-1 last:flex-none">
                                     <div className="flex flex-col items-center">
                                         <div
@@ -343,11 +273,10 @@ const CalculadoraPage = () => {
                                         <span className={`text-[10px] md:text-xs mt-1 font-medium whitespace-nowrap ${step === currentStep ? 'text-[#163C2E]' : 'text-slate-400'}`}>
                                             {step === 1 && 'Datos'}
                                             {step === 2 && 'Vivienda'}
-                                            {step === 3 && 'Resultados'}
-                                            {step === 4 && 'Acción'}
+                                            {step === 3 && 'Laboral'}
                                         </span>
                                     </div>
-                                    {step < 4 && (
+                                    {step < 3 && (
                                         <div className={`flex-1 h-0.5 mx-2 md:mx-4 transition-all duration-500 ${step < currentStep ? 'bg-[#28A77D]' : 'bg-slate-200'}`} />
                                     )}
                                 </div>
@@ -369,35 +298,16 @@ const CalculadoraPage = () => {
                             </div>
                         )}
 
-                        {/* Success Message */}
-                        {isSuccess ? (
-                            <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-slate-100 animate-fade-in flex-1 flex flex-col items-center justify-center text-center">
-                                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
-                                    <CheckCircle className="w-10 h-10 text-[#28A77D]" />
-                                </div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-[#163C2E] mb-4">
-                                    ¡Gracias, {formData.name.split(' ')[0]}!
-                                </h1>
-                                <p className="text-lg text-slate-600 mb-8 max-w-md">
-                                    Hemos recibido tu solicitud correctamente. Uno de nuestros expertos analizará tu caso y te contactará muy pronto.
-                                </p>
-                                <Link
-                                    href="/"
-                                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#163C2E] text-white font-bold text-lg rounded-xl hover:bg-[#28A77D] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
-                                >
-                                    <Home className="w-5 h-5" />
-                                    Volver al inicio
-                                </Link>
-                            </div>
-                        ) : (
-                            <>
-                                {/* Step 1: Personal Information */}
+                        {/* Success Message - Removed full screen success, integrated into step 4 */}
+                        {/* isSuccess ? (...) : (...) removed wrapper logic to integrate */}
+                        
+                        {/* Step 1: Personal Information */}
                                 {currentStep === 1 && (
                             <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100 animate-fade-in flex-1 flex flex-col">
                                 <div className="text-center mb-4 md:mb-6">
                                     <div className="inline-flex items-center gap-2 bg-[#28A77D]/10 text-[#28A77D] px-3 py-1.5 rounded-full text-xs font-bold mb-3">
                                         <Sparkles className="w-3 h-3" />
-                                        Paso 1 de 4
+                                        Paso 1 de 3
                                     </div>
                                     <h1 className="text-2xl md:text-3xl font-bold text-[#163C2E] mb-2">
                                         Cuéntanos sobre ti
@@ -483,11 +393,11 @@ const CalculadoraPage = () => {
                                                         : 'border-slate-200 focus:border-[#28A77D] focus:ring-[#28A77D]/10'
                                                     }`}
                                                 />
-                                                {phoneTouched && phoneInput && !isValidPhone(phoneInput) && (
-                                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-red-500 font-medium hidden md:block">
-                                                        Número incompleto
-                                                    </span>
-                                                )}
+                                            {phoneTouched && phoneInput && !isValidPhone(phoneInput) && (
+                                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-red-500 font-medium hidden md:block">
+                                                    Móvil no válido (6xx.../7xx...)
+                                                </span>
+                                            )}
                                             </div>
                                         </div>
                                     </div>
@@ -500,8 +410,8 @@ const CalculadoraPage = () => {
                             <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100 animate-fade-in flex-1 flex flex-col">
                                 <div className="text-center mb-4 flex-shrink-0">
                                     <div className="inline-flex items-center gap-2 bg-[#28A77D]/10 text-[#28A77D] px-3 py-1.5 rounded-full text-xs font-bold mb-2">
-                                        <Home className="w-3 h-3" />
-                                        Paso 2 de 4
+                                        <Users className="w-3 h-3" />
+                                        Paso 2 de 3
                                     </div>
                                     <h1 className="text-2xl md:text-3xl font-bold text-[#163C2E] mb-1">
                                         Tu vivienda ideal
@@ -608,13 +518,100 @@ const CalculadoraPage = () => {
                             </div>
                         )}
 
-                        {/* Step 3: Results */}
+                        {/* Step 3: Employment Details */}
                         {currentStep === 3 && (
-                            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100 animate-fade-in flex-1 flex flex-col overflow-y-auto">
+                            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100 animate-fade-in flex-1 flex flex-col">
                                 <div className="text-center mb-4 flex-shrink-0">
                                     <div className="inline-flex items-center gap-2 bg-[#28A77D]/10 text-[#28A77D] px-3 py-1.5 rounded-full text-xs font-bold mb-2">
+                                        <Users className="w-3 h-3" />
+                                        Paso 3 de 3
+                                    </div>
+                                    <h1 className="text-2xl md:text-3xl font-bold text-[#163C2E] mb-1">
+                                        Tu perfil laboral
+                                    </h1>
+                                    <p className="text-xs md:text-sm text-slate-600">
+                                        Para ofrecerte la mejor solución financiera
+                                    </p>
+                                </div>
+
+                                <div className="space-y-6 flex-1 flex flex-col justify-center">
+                                    {/* Salary Range */}
+                                    <div>
+                                        <label className="block text-sm md:text-base font-bold text-[#163C2E] mb-3">
+                                            ¿Cuál es tu salario mensual neto?
+                                        </label>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            {['<1.500€', '1.500€ - 2.000€', '2.000€ - 3.000€', '+4.000€'].map((range) => (
+                                                <button
+                                                    key={range}
+                                                    type="button"
+                                                    onClick={() => setFormData({ ...formData, salary: range })}
+                                                    className={`px-4 py-3 rounded-xl font-bold transition-all border-2 text-sm md:text-base ${formData.salary === range
+                                                        ? 'bg-[#163C2E] text-white border-[#163C2E] shadow-lg transform scale-[1.02]'
+                                                        : 'bg-white text-slate-600 border-slate-200 hover:border-[#28A77D] hover:bg-emerald-50'
+                                                        }`}
+                                                >
+                                                    {range}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Employment Status */}
+                                    <div>
+                                        <label className="block text-sm md:text-base font-bold text-[#163C2E] mb-3">
+                                            ¿Cuál es tu situación laboral?
+                                        </label>
+                                        <select
+                                            value={formData.employmentStatus}
+                                            onChange={(e) => setFormData({ ...formData, employmentStatus: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#28A77D] focus:outline-none focus:ring-2 focus:ring-[#28A77D]/10 transition-all text-sm md:text-base bg-white"
+                                        >
+                                            <option value="">Selecciona tu situación</option>
+                                            {[
+                                                "Contrato Indefinido",
+                                                "Contrato Temporal",
+                                                "Funcionario",
+                                                "Autónomo / Empresario",
+                                                "Prácticas / Becario",
+                                                "Desempleado",
+                                                "Incapacidad laboral (Temporal o Permanente)",
+                                                "Jubilado",
+                                                "Estudiante"
+                                            ].map((status) => (
+                                                <option key={status} value={status}>{status}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/* Privacy Policy Disclaimer */}
+                                    <div className="text-center px-4">
+                                        <p className="text-[10px] text-slate-400 leading-tight">
+                                            Al hacer clic en "¡Ver mi plan!", aceptas nuestra <Link href="/politicas#privacidad" target="_blank" className="underline hover:text-[#28A77D]">Política de Privacidad</Link> y <Link href="/politicas#aviso-legal" target="_blank" className="underline hover:text-[#28A77D]">Aviso Legal</Link>, y consientes el tratamiento de tus datos para el estudio de viabilidad.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Step 4: Results and Success */}
+                        {currentStep === 4 && (
+                            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100 animate-fade-in flex-1 flex flex-col overflow-y-auto">
+                                <div className="text-center mb-4 flex-shrink-0">
+                                    {isSuccess && (
+                                        <div className="mb-4 bg-emerald-50 border border-emerald-100 p-3 rounded-xl animate-fade-in">
+                                            <div className="flex items-center justify-center gap-2 text-[#28A77D] font-bold mb-1">
+                                                <CheckCircle className="w-5 h-5" />
+                                                ¡Solicitud Recibida!
+                                            </div>
+                                            <p className="text-xs text-emerald-800">
+                                                Gracias {formData.name.split(' ')[0]}, un experto analizará tu caso.
+                                            </p>
+                                        </div>
+                                    )}
+                                    <div className="inline-flex items-center gap-2 bg-[#28A77D]/10 text-[#28A77D] px-3 py-1.5 rounded-full text-xs font-bold mb-2">
                                         <TrendingDown className="w-3 h-3" />
-                                        Paso 3 de 4
+                                        Paso 4 de 4
                                     </div>
                                     <h1 className="text-2xl md:text-3xl font-bold text-[#163C2E] mb-1">
                                         ¡Tus resultados!
@@ -688,70 +685,13 @@ const CalculadoraPage = () => {
                             </div>
                         )}
 
-                        {/* Step 4: Final CTA */}
-                        {currentStep === 4 && (
-                            <div className="bg-gradient-to-br from-[#163C2E] via-[#1e4a3a] to-[#28A77D] rounded-2xl shadow-xl p-6 md:p-8 text-white animate-fade-in relative overflow-hidden flex-1 flex flex-col">
-                                <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
-                                <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#28A77D]/20 rounded-full blur-3xl"></div>
-
-                                <div className="relative z-10 flex-1 flex flex-col">
-                                    <div className="text-center mb-4">
-                                        <Sparkles className="w-12 h-12 mx-auto mb-3 text-yellow-300 animate-bounce" />
-                                        <h1 className="text-3xl md:text-4xl font-bold mb-3">
-                                            ¡A un paso de tu hogar!
-                                        </h1>
-                                        <p className="text-base md:text-lg text-emerald-100 mb-4">
-                                            Con solo <span className="font-bold text-yellow-300">{getDisplayValue(formulaHogarDownPayment).toLocaleString('es-ES')}€</span> de entrada{formData.buyingWith === 'partner' ? ' por persona' : ''}
-                                        </p>
-                                    </div>
-
-                                    <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 mb-5 border border-white/20 flex-1 overflow-y-auto">
-                                        <h3 className="font-bold text-sm mb-3 flex items-center gap-2">
-                                            <CheckCircle className="w-4 h-4 text-[#28A77D]" />
-                                            Lo que conseguirás:
-                                        </h3>
-                                        <ul className="space-y-2 text-sm">
-                                            {[
-                                                `Ahorrar ${getDisplayValue(savings).toLocaleString('es-ES')}€${formData.buyingWith === 'partner' ? '/persona' : ''}`,
-                                                'Propietario desde día 1',
-                                                'No perder dinero en alquiler',
-                                                'Revalorización incluida',
-                                                '100% legal ante notario'
-                                            ].map((benefit, idx) => (
-                                                <li key={idx} className="flex items-start gap-2">
-                                                    <div className="mt-0.5 p-0.5 bg-[#28A77D] rounded-full flex-shrink-0">
-                                                        <CheckCircle className="w-2.5 h-2.5 text-white" />
-                                                    </div>
-                                                    <span className="text-emerald-50 text-xs">{benefit}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    <div className="text-center">
-                                        <button
-                                            onClick={sendToWebhook}
-                                            disabled={isSubmitting}
-                                            className={`group inline-flex items-center gap-2 px-8 py-4 bg-yellow-400 text-[#163C2E] font-bold text-xl rounded-xl hover:bg-yellow-300 transition-all transform hover:scale-105 shadow-xl ${isSubmitting ? 'opacity-75 cursor-wait' : ''}`}
-                                        >
-                                            {isSubmitting ? 'Enviando...' : '¡Lo quiero!'}
-                                            {!isSubmitting && <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />}
-                                        </button>
-                                        <p className="text-xs text-emerald-100 mt-3">
-                                            Sin compromiso • Gratis • Respuesta en 24h
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
                         {/* Navigation Buttons */}
-                        {currentStep < 4 && (
+                        {currentStep <= 3 && (
                             <div className="flex items-center justify-between mt-4 gap-3 flex-shrink-0">
                                 <button
                                     onClick={prevStep}
-                                    disabled={currentStep === 1}
-                                    className={`px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 text-sm ${currentStep === 1
+                                    disabled={currentStep === 1 || isSubmitting}
+                                    className={`px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 text-sm ${currentStep === 1 || isSubmitting
                                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
                                         : 'bg-white text-[#163C2E] hover:bg-slate-50 border-2 border-slate-200'
                                         }`}
@@ -762,30 +702,38 @@ const CalculadoraPage = () => {
 
                                 <button
                                     onClick={nextStep}
-                                    disabled={!canProceed()}
-                                    className={`px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 text-sm ${canProceed()
+                                    disabled={!canProceed() || isSubmitting}
+                                    className={`px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 text-sm ${canProceed() && !isSubmitting
                                         ? 'bg-[#28A77D] text-white hover:bg-emerald-600 shadow-lg hover:shadow-xl hover:scale-105'
                                         : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                                         }`}
                                 >
-                                    {currentStep === 3 ? '¡Ver mi plan!' : 'Siguiente'}
-                                    <ArrowRight className="w-4 h-4" />
+                                    {isSubmitting ? (
+                                        <span className="flex items-center gap-2">
+                                            <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                                            Calculando...
+                                        </span>
+                                    ) : (
+                                        <>
+                                            {currentStep === 3 ? '¡Ver mi plan!' : 'Siguiente'}
+                                            <ArrowRight className="w-4 h-4" />
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         )}
 
-                        {currentStep === 4 && (
+                        {currentStep > 3 && (
                             <div className="text-center mt-3 flex-shrink-0">
-                                <Link
-                                    href="/"
-                                    className="inline-flex items-center gap-2 text-slate-500 hover:text-[#28A77D] transition-colors text-xs"
-                                >
-                                    <ArrowLeft className="w-3 h-3" />
-                                    Volver al inicio
-                                </Link>
+                                <p className="text-sm text-slate-500">Preparando tus resultados...</p>
                             </div>
                         )}
-                        </>
+                        {/* </>) // removed fragment closing */}
+                    {/* )} // removed success condition closing */}
+                    {currentStep > 3 && (
+                         <div className="flex-1 flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#28A77D]"></div>
+                         </div>
                     )}
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 import {
   Home,
   TrendingUp,
@@ -421,8 +422,8 @@ const LandingPage = () => {
               FórmulaHogar
             </div>
             <div className="flex gap-6 text-sm">
-              <a href="#" className="hover:text-white transition-colors">Aviso Legal</a>
-              <a href="#" className="hover:text-white transition-colors">Privacidad</a>
+              <Link href="/politicas#aviso-legal" className="hover:text-white transition-colors">Aviso Legal</Link>
+              <Link href="/politicas#privacidad" className="hover:text-white transition-colors">Privacidad</Link>
               <a href="#" className="hover:text-white transition-colors">Cookies</a>
             </div>
           </div>
