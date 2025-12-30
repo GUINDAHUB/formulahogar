@@ -49,6 +49,7 @@ interface FormData {
     age: number;
     salary: string;
     employmentStatus: string;
+    purchasePhase: string;
 }
 
 const AnimatedNumber = ({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) => {
@@ -93,7 +94,8 @@ const CalculadoraPage = () => {
         buyingWith: 'alone',
         age: 30,
         salary: '',
-        employmentStatus: ''
+        employmentStatus: '',
+        purchasePhase: ''
     });
     
     const [phonePrefix, setPhonePrefix] = useState('+34');
@@ -221,7 +223,7 @@ const CalculadoraPage = () => {
                        isValidEmail(formData.email) && 
                        isValidPhone(phoneInput);
             case 2:
-                return formData.community && formData.age > 0;
+                return formData.community && formData.age > 0 && formData.purchasePhase !== '';
             case 3:
                 return formData.salary !== '' && formData.employmentStatus !== '';
             default:
@@ -448,6 +450,25 @@ const CalculadoraPage = () => {
                                             <span>50k€</span>
                                             <span>1M€</span>
                                         </div>
+                                    </div>
+
+                                    {/* Purchase Phase */}
+                                    <div>
+                                        <label className="block text-sm md:text-base font-bold text-[#163C2E] mb-1.5 flex items-center gap-2">
+                                            <Home className="w-4 h-4 text-[#28A77D]" />
+                                            ¿En qué fase estás de adquirir una vivienda?
+                                        </label>
+                                        <select
+                                            value={formData.purchasePhase}
+                                            onChange={(e) => setFormData({ ...formData, purchasePhase: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#28A77D] focus:outline-none focus:ring-2 focus:ring-[#28A77D]/10 transition-all text-sm md:text-base bg-white"
+                                        >
+                                            <option value="">Selecciona una opción</option>
+                                            <option value="No he empezado a buscar">No he empezado a buscar</option>
+                                            <option value="Estoy buscando">Estoy buscando</option>
+                                            <option value="Tengo la vivienda reservada">Tengo la vivienda reservada</option>
+                                            <option value="He firmado arras">He firmado arras</option>
+                                        </select>
                                     </div>
 
                                     {/* Community */}
