@@ -14,6 +14,7 @@ import Navbar from '@/components/Navbar';
 import LogoSlider from '@/components/LogoSlider';
 import ReviewsSlider from '@/components/ReviewsSlider';
 import VideoSection from '@/components/VideoSection';
+import Footer from '@/components/Footer';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { sendGTMEvent } from '@next/third-parties/google'
 
@@ -53,9 +54,9 @@ const LandingPage = () => {
                 Revolucionamos el acceso a la vivienda
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Tu primera vivienda, <br />
+                Tu primera vivienda, <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#28A77D] to-emerald-300">
-                sin la barrera de la entrada
+                  sin la barrera de la entrada
                 </span>
               </h1>
               <p className="text-lg lg:text-xl text-slate-300 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
@@ -81,18 +82,18 @@ const LandingPage = () => {
 
               <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-400">
                 <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
-                      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
-                      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
-                      <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Usuario" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
-                      <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Usuario" className="w-full h-full object-cover" />
-                    </div>
+                  <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
+                    <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Usuario" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Usuario" className="w-full h-full object-cover" />
+                  </div>
                 </div>
                 <p>Más de <span className="text-white font-bold">500+</span> propietarios felices</p>
               </div>
@@ -174,7 +175,7 @@ const LandingPage = () => {
       </header>
 
       {/* --- VIDEO EXPLAINER --- */}
-      <VideoSection />
+      <VideoSection playbackId="02LkyVlxls01u2OFEyVqk00ZLuMVNM9FxaBtAfSNQcVr02g" />
 
       {/* --- TRUST BADGES --- */}
       {/* <section className="py-10 border-b border-slate-100 bg-white">
@@ -260,33 +261,33 @@ const LandingPage = () => {
                       <svg className="w-full h-full overflow-visible" viewBox="0 0 100 60" preserveAspectRatio="none">
                         <defs>
                           <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#28A77D" stopOpacity="0.5"/>
-                            <stop offset="100%" stopColor="#28A77D" stopOpacity="0"/>
+                            <stop offset="0%" stopColor="#28A77D" stopOpacity="0.5" />
+                            <stop offset="100%" stopColor="#28A77D" stopOpacity="0" />
                           </linearGradient>
                           <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
                             <feGaussianBlur stdDeviation="2" result="blur" />
                             <feComposite in="SourceGraphic" in2="blur" operator="over" />
                           </filter>
                         </defs>
-                        
+
                         {/* Grid Lines Horizontal */}
                         <line x1="0" y1="15" x2="100" y2="15" stroke="white" strokeOpacity="0.05" strokeDasharray="2" />
                         <line x1="0" y1="30" x2="100" y2="30" stroke="white" strokeOpacity="0.05" strokeDasharray="2" />
                         <line x1="0" y1="45" x2="100" y2="45" stroke="white" strokeOpacity="0.05" strokeDasharray="2" />
 
                         {/* Area Path */}
-                        <path 
-                          d="M0,45 C30,42 60,25 100,10 V60 H0 Z" 
-                          fill="url(#chartGradient)" 
+                        <path
+                          d="M0,45 C30,42 60,25 100,10 V60 H0 Z"
+                          fill="url(#chartGradient)"
                           className="transition-all duration-1000 ease-out"
                         />
-                        
+
                         {/* Line Path */}
-                        <path 
-                          d="M0,45 C30,42 60,25 100,10" 
-                          fill="none" 
-                          stroke="#28A77D" 
-                          strokeWidth="0.8" 
+                        <path
+                          d="M0,45 C30,42 60,25 100,10"
+                          fill="none"
+                          stroke="#28A77D"
+                          strokeWidth="0.8"
                           strokeLinecap="round"
                           filter="url(#glow)"
                           className="drop-shadow-[0_0_8px_rgba(40,167,125,0.5)]"
@@ -310,7 +311,7 @@ const LandingPage = () => {
                         <p className="text-[10px] text-slate-300 uppercase tracking-wider mt-1">Valor Futuro</p>
                       </div>
                     </div>
-                    
+
                     {/* Moved Start Label higher (approx 55% top) to sit above the line start (75%) */}
                     <div className="absolute top-[55%] left-0 z-30 -translate-y-1/2">
                       <div className="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-lg border border-white/10">
@@ -414,24 +415,7 @@ const LandingPage = () => {
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="bg-[#0f291e] text-slate-400 py-12 border-t border-white/5">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div className="flex items-center gap-2 font-bold text-2xl text-white mb-4 md:mb-0">
-              <Home className="w-6 h-6 text-[#28A77D]" />
-              FórmulaHogar
-            </div>
-            <div className="flex gap-6 text-sm">
-              <Link href="/politicas#aviso-legal" className="hover:text-white transition-colors">Aviso Legal</Link>
-              <Link href="/politicas#privacidad" className="hover:text-white transition-colors">Privacidad</Link>
-              <a href="#" className="hover:text-white transition-colors">Cookies</a>
-            </div>
-          </div>
-          <div className="text-center md:text-left text-xs opacity-60">
-            © {new Date().getFullYear()} Fórmula Hogar. Todos los derechos reservados. Una revolución en el sector PropTech.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
