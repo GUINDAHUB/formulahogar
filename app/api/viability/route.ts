@@ -36,6 +36,48 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'No files uploaded' }, { status: 400 });
         }
 
+        // --- 1b. File Size Validation ---
+        const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+        for (const file of files) {
+            if (file.size > MAX_FILE_SIZE) {
+                console.warn(`[Viability] ✗ Rejected oversized file: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`);
+                return NextResponse.json(
+                    { error: `El archivo "${file.name}" supera el límite de 10 MB. Por favor, comprime o reduce el archivo.` },
+                    { status: 400 }
+                );
+            }
+        }
+
+        // --- 1c. Magic Number (MIME) Validation ---
+        // Allowed signatures: PDF, JPEG, PNG
+        const ALLOWED_SIGNATURES: { mime: string; bytes: number[]; offset?: number }[] = [
+            { mime: 'application/pdf', bytes: [0x25, 0x50, 0x44, 0x46] },           // %PDF
+            { mime: 'image/jpeg', bytes: [0xFF, 0xD8, 0xFF] },                  // JFIF/EXIF
+            { mime: 'image/png', bytes: [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A] }, // PNG
+        ];
+
+        const matchesMagic = (buffer: Uint8Array, sig: number[], offset = 0) =>
+            sig.every((byte, i) => buffer[offset + i] === byte);
+
+        for (const file of files) {
+            const HEADER_BYTES = 8;
+            const arrayBuffer = await file.slice(0, HEADER_BYTES).arrayBuffer();
+            const header = new Uint8Array(arrayBuffer);
+
+            const isValid = ALLOWED_SIGNATURES.some(sig =>
+                matchesMagic(header, sig.bytes, sig.offset ?? 0)
+            );
+
+            if (!isValid) {
+                console.warn(`[Viability] ✗ Rejected file with invalid magic bytes: ${file.name}`);
+                return NextResponse.json(
+                    { error: `El archivo "${file.name}" no es un PDF, JPEG ni PNG válido.` },
+                    { status: 400 }
+                );
+            }
+        }
+
         // --- 2. Normalize Phone ---
         let normalizedPhone = phone.replace(/[\s-]/g, '');
         if (!normalizedPhone.startsWith('+') && (normalizedPhone.startsWith('6') || normalizedPhone.startsWith('7') || normalizedPhone.startsWith('9')) && normalizedPhone.length === 9) {
@@ -56,6 +98,7 @@ export async function POST(req: Request) {
         console.log(`[Viability] Searching for: ${normalizedPhone} | Local: ${localPhone} | Field ID: ${phoneFieldId}`);
 
         let targetTaskId: string | null = null;
+        let targetTaskName: string | null = null;
 
         // Strategy 1: Use custom_fields filter if field ID is available
         if (phoneFieldId) {
@@ -93,7 +136,8 @@ export async function POST(req: Request) {
 
                     if (response.data.tasks && response.data.tasks.length > 0) {
                         targetTaskId = response.data.tasks[0].id;
-                        console.log(`[Viability] ✓ Found via custom field (${phoneValue}): ${response.data.tasks[0].name} (${targetTaskId})`);
+                        targetTaskName = response.data.tasks[0].name;
+                        console.log(`[Viability] ✓ Found via custom field (${phoneValue}): ${targetTaskName} (${targetTaskId})`);
                         break;
                     }
                 } catch (error: any) {
@@ -144,7 +188,8 @@ export async function POST(req: Request) {
 
                     if (found) {
                         targetTaskId = found.id;
-                        console.log(`[Viability] ✓ Found via scan on page ${page}: ${found.name} (${targetTaskId})`);
+                        targetTaskName = found.name;
+                        console.log(`[Viability] ✓ Found via scan on page ${page}: ${targetTaskName} (${targetTaskId})`);
                         break;
                     }
 
@@ -161,12 +206,44 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        // --- 4. Upload Files ---
-        console.log(`[Viability] Uploading ${files.length} files to task ${targetTaskId}...`);
+        // --- 4. Upload Files (with auto-rename) ---
 
-        const uploadPromises = files.map(async (file) => {
+        // Helper: normalize a string to a URL/filename-safe slug
+        const slugify = (str: string) =>
+            str
+                .normalize('NFD')                      // decompose accented chars
+                .replace(/[\u0300-\u036f]/g, '')       // strip diacritics
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')          // remove non-alphanumeric
+                .trim()
+                .replace(/\s+/g, '-');                  // spaces → hyphens
+
+        // Helper: map form field key to a human-readable doc type slug
+        const DOC_SLUG: Record<string, string> = {
+            vida_laboral: 'vida-laboral',
+            trimestrales: 'trimestrales',
+            renta: 'renta',
+            nominas: 'nominas',
+        };
+
+        const userSlug = targetTaskName ? slugify(targetTaskName) : 'usuario';
+
+        // Build a map of key → file for entries that start with 'file_'
+        const fileEntries = Array.from(formData.entries()).filter(([key]) => key.startsWith('file_'));
+
+        console.log(`[Viability] Uploading ${files.length} files to task ${targetTaskId} as user "${userSlug}"...`);
+
+        const uploadPromises = fileEntries.map(async ([key, rawFile]) => {
+            const file = rawFile as File;
+            const docKey = key.replace(/^file_/, '');
+            const docSlug = DOC_SLUG[docKey] ?? docKey.replace(/_/g, '-');
+            const ext = file.name.split('.').pop()?.toLowerCase() ?? 'pdf';
+            const newName = `${docSlug}-${userSlug}.${ext}`;
+
+            console.log(`[Viability] Renaming "${file.name}" → "${newName}"`);
+
             const body = new FormData();
-            body.append('attachment', file as unknown as Blob, file.name);
+            body.append('attachment', file as unknown as Blob, newName);
 
             try {
                 const response = await fetch(`${CLICKUP_API_BASE}/task/${targetTaskId}/attachment`, {
@@ -176,13 +253,13 @@ export async function POST(req: Request) {
                 });
 
                 if (response.ok) {
-                    console.log(`[Viability] ✓ Uploaded: ${file.name}`);
+                    console.log(`[Viability] ✓ Uploaded: ${newName}`);
                 } else {
                     const error = await response.text();
-                    console.warn(`[Viability] ✗ Failed to upload ${file.name}: ${response.status}`, error);
+                    console.warn(`[Viability] ✗ Failed to upload ${newName}: ${response.status}`, error);
                 }
             } catch (error: any) {
-                console.error(`[Viability] ✗ Network error uploading ${file.name}:`, error.message);
+                console.error(`[Viability] ✗ Network error uploading ${newName}:`, error.message);
             }
         });
 

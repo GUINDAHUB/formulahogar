@@ -118,7 +118,7 @@ const Navbar = () => {
                                 <div className="bg-white rounded-xl shadow-xl p-2 border border-slate-100 flex flex-col gap-1 overflow-hidden">
                                     <Link href="/" className="block px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors group/item">
                                         <div className="text-sm font-bold text-[#163C2E] group-hover/item:text-[#28A77D]">Cesión de Uso</div>
-                                        <div className="text-xs text-slate-500 mt-0.5">Vive ya, paga después</div>
+                                        <div className="text-xs text-slate-500 mt-0.5">Compra ya, paga después</div>
                                     </Link>
                                     <Link href="/alquiler-opcion-compra" className="block px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors group/item">
                                         <div className="text-sm font-bold text-[#163C2E] group-hover/item:text-[#28A77D]">Alquiler con Opción a Compra</div>

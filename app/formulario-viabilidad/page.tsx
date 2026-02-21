@@ -18,13 +18,19 @@ interface IFormInput {
 
 export default function ViabilityFormPage() {
     const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'loading' | 'success' | 'task_not_found' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [selectedFiles, setSelectedFiles] = useState<{ [key: string]: File | null }>({});
+    const [fileSizeErrors, setFileSizeErrors] = useState<{ [key: string]: string }>({});
     const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<IFormInput>();
     const router = useRouter();
 
     // Phone state matching calculator
     const [phoneInput, setPhoneInput] = useState('');
     const [phoneTouched, setPhoneTouched] = useState(false);
+
+    // Privacy consent
+    const [privacyAccepted, setPrivacyAccepted] = useState(false);
+    const [privacyTouched, setPrivacyTouched] = useState(false);
 
     const employmentStatus = watch('employmentStatus');
 
@@ -44,6 +50,11 @@ export default function ViabilityFormPage() {
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         if (!isValidPhone(data.phone)) {
             setPhoneTouched(true);
+            return;
+        }
+
+        if (!privacyAccepted) {
+            setPrivacyTouched(true);
             return;
         }
 
@@ -81,15 +92,29 @@ export default function ViabilityFormPage() {
         } catch (err: any) {
             if (err.response && err.response.status === 404) {
                 setSubmissionStatus('task_not_found');
+            } else if (err.response && err.response.status === 400 && err.response.data?.error) {
+                setErrorMessage(err.response.data.error);
+                setSubmissionStatus('error');
             } else {
+                setErrorMessage(null);
                 setSubmissionStatus('error');
             }
         }
     };
 
+    const MAX_FILE_SIZE_MB = 10;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
     const handleFileChange = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
-            setSelectedFiles(prev => ({ ...prev, [key]: event.target.files![0] }));
+            const file = event.target.files[0];
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                setFileSizeErrors(prev => ({ ...prev, [key]: `El archivo supera el límite de ${MAX_FILE_SIZE_MB} MB.` }));
+                event.target.value = ''; // reset input
+                return;
+            }
+            setFileSizeErrors(prev => { const n = { ...prev }; delete n[key]; return n; });
+            setSelectedFiles(prev => ({ ...prev, [key]: file }));
         }
     };
 
@@ -139,6 +164,12 @@ export default function ViabilityFormPage() {
                     />
                 </label>
             </div>
+            {fileSizeErrors[key] && (
+                <p className="mt-2 text-xs text-red-500 font-medium flex items-center gap-1">
+                    <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                    {fileSizeErrors[key]}
+                </p>
+            )}
         </div>
     );
 
@@ -257,8 +288,8 @@ export default function ViabilityFormPage() {
                                         onBlur={() => setPhoneTouched(true)}
                                         placeholder="600 000 000"
                                         className={`w-full px-4 py-3 rounded-xl border-2 transition-all text-base focus:outline-none focus:ring-2 ${phoneTouched && phoneInput && !isValidPhone(phoneInput)
-                                                ? 'border-red-300 focus:border-red-500 focus:ring-red-100 bg-red-50'
-                                                : 'border-slate-200 focus:border-[#28A77D] focus:ring-[#28A77D]/10'
+                                            ? 'border-red-300 focus:border-red-500 focus:ring-red-100 bg-red-50'
+                                            : 'border-slate-200 focus:border-[#28A77D] focus:ring-[#28A77D]/10'
                                             }`}
                                     />
                                     {phoneTouched && phoneInput && !isValidPhone(phoneInput) && (
@@ -349,8 +380,51 @@ export default function ViabilityFormPage() {
                             )}
                         </AnimatePresence>
 
+                        {/* Privacy Consent Checkbox */}
+                        <div className="pt-2">
+                            <label className={`flex items-start gap-3 cursor-pointer group ${privacyTouched && !privacyAccepted ? 'text-red-600' : 'text-slate-600'}`}>
+                                <div className="relative flex-shrink-0 mt-0.5">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only"
+                                        checked={privacyAccepted}
+                                        onChange={(e) => {
+                                            setPrivacyAccepted(e.target.checked);
+                                            setPrivacyTouched(true);
+                                        }}
+                                    />
+                                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${privacyAccepted ? 'bg-[#28A77D] border-[#28A77D]' : privacyTouched && !privacyAccepted ? 'border-red-400 bg-red-50' : 'border-slate-300 group-hover:border-[#28A77D]/60'}`}>
+                                        {privacyAccepted && (
+                                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        )}
+                                    </div>
+                                </div>
+                                <span className="text-sm leading-relaxed">
+                                    He leído y acepto la{' '}
+                                    <a
+                                        href="/politica-de-privacidad"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="font-semibold text-[#28A77D] underline underline-offset-2 hover:text-emerald-700"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        Política de Privacidad
+                                    </a>{' '}
+                                    y consiento el tratamiento de mis datos personales para la realización del estudio de viabilidad.
+                                </span>
+                            </label>
+                            {privacyTouched && !privacyAccepted && (
+                                <p className="mt-2 text-xs text-red-500 font-medium flex items-center gap-1">
+                                    <XCircle className="w-3.5 h-3.5" />
+                                    Debes aceptar la política de privacidad para continuar.
+                                </p>
+                            )}
+                        </div>
+
                         {/* Submit Button */}
-                        <div className="pt-4">
+                        <div className="pt-2">
                             <button
                                 type="submit"
                                 disabled={submissionStatus === 'loading'}
@@ -369,8 +443,8 @@ export default function ViabilityFormPage() {
 
                         {submissionStatus === 'error' && (
                             <div className="p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm text-center font-medium flex items-center justify-center gap-2">
-                                <XCircle className="w-5 h-5" />
-                                Ocurrió un error al enviar. Inténtalo más tarde.
+                                <XCircle className="w-5 h-5 flex-shrink-0" />
+                                {errorMessage ?? 'Ocurrió un error al enviar. Inténtalo más tarde.'}
                             </div>
                         )}
 
