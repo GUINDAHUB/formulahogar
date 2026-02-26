@@ -264,6 +264,20 @@ export async function POST(req: Request) {
         });
 
         await Promise.all(uploadPromises);
+
+        // --- 5. Update Task Status → DOCUMENTACIÓN ---
+        try {
+            await axios.put(
+                `${CLICKUP_API_BASE}/task/${targetTaskId}`,
+                { status: 'documentación' },
+                { headers: { Authorization: apiKey, 'Content-Type': 'application/json' } }
+            );
+            console.log(`[Viability] ✓ Status updated to DOCUMENTACIÓN for task ${targetTaskId}`);
+        } catch (error: any) {
+            // Non-blocking: log but don't fail the request
+            console.warn(`[Viability] ⚠ Could not update task status:`, error.response?.data ?? error.message);
+        }
+
         return NextResponse.json({ success: true, taskId: targetTaskId });
 
     } catch (error: any) {
