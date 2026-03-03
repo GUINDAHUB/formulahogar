@@ -16,6 +16,26 @@ interface ClickUpTask {
 
 // --- Constants ---
 const CLICKUP_API_BASE = 'https://api.clickup.com/api/v2';
+const N8N_WEBHOOK_URL = 'https://n8n.srv954356.hstgr.cloud/webhook/form2supabase';
+
+// --- Webhook helper ---
+async function sendWebhook(phone: string, status: 'success' | 'error', detail?: string) {
+    try {
+        await fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                phone,
+                clickup_status: status,
+                detail: detail ?? null,
+                timestamp: new Date().toISOString(),
+            }),
+        });
+        console.log(`[Viability] ✓ Webhook sent: ${status}`);
+    } catch (err: any) {
+        console.warn('[Viability] ⚠ Could not send webhook:', err.message);
+    }
+}
 
 export async function POST(req: Request) {
     try {
@@ -205,6 +225,7 @@ export async function POST(req: Request) {
 
         if (!targetTaskId) {
             console.log('[Viability] ✗ No task found');
+            await sendWebhook(phone, 'error', 'Usuario no encontrado en ClickUp');
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
@@ -216,6 +237,7 @@ export async function POST(req: Request) {
             const attachments: any[] = taskDetails.data?.attachments ?? [];
             if (attachments.length > 0) {
                 console.warn(`[Viability] ✗ Task ${targetTaskId} already has ${attachments.length} attachment(s). Blocking.`);
+                await sendWebhook(phone, 'error', 'Documentación ya enviada previamente (tarea con adjuntos existentes)');
                 return NextResponse.json(
                     { error: 'already_submitted' },
                     { status: 409 }
@@ -298,10 +320,13 @@ export async function POST(req: Request) {
             console.warn(`[Viability] ⚠ Could not update task status:`, error.response?.data ?? error.message);
         }
 
+        await sendWebhook(phone, 'success', `Documentación enviada correctamente a ClickUp (tarea: ${targetTaskId})`);
         return NextResponse.json({ success: true, taskId: targetTaskId });
 
     } catch (error: any) {
         console.error('[Viability] Internal error:', error.message);
+        const phone = (await req.formData().catch(() => new FormData())).get('phone') as string ?? 'unknown';
+        await sendWebhook(phone, 'error', `Error interno del servidor: ${error.message}`);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
