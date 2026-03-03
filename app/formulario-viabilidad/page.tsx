@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Loader2, Upload, FileCheck, CheckCircle2, XCircle, Home } from 'lucide-react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -17,16 +17,42 @@ interface IFormInput {
 }
 
 export default function ViabilityFormPage() {
-    const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'loading' | 'success' | 'task_not_found' | 'error'>('idle');
+    return (
+        <React.Suspense fallback={null}>
+            <ViabilityFormContent />
+        </React.Suspense>
+    );
+}
+
+function ViabilityFormContent() {
+    const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'loading' | 'success' | 'task_not_found' | 'already_submitted' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [selectedFiles, setSelectedFiles] = useState<{ [key: string]: File | null }>({});
     const [fileSizeErrors, setFileSizeErrors] = useState<{ [key: string]: string }>({});
     const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<IFormInput>();
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     // Phone state matching calculator
     const [phoneInput, setPhoneInput] = useState('');
     const [phoneTouched, setPhoneTouched] = useState(false);
+
+    // Pre-fill from URL params: ?tel=XXXXXXXXX&tipo=autonomo|cuenta_ajena
+    useEffect(() => {
+        const tel = searchParams.get('tel');
+        if (tel) {
+            const raw = tel.replace(/\D/g, '');
+            // Strip Spanish country code prefix if present (+34XXXXXXXXX → XXXXXXXXX)
+            const digits = (raw.startsWith('34') && raw.length > 9 ? raw.slice(2) : raw).slice(0, 9);
+            setPhoneInput(digits);
+            setValue('phone', digits);
+        }
+
+        const tipo = searchParams.get('tipo');
+        if (tipo === 'autonomo' || tipo === 'cuenta_ajena') {
+            setValue('employmentStatus', tipo);
+        }
+    }, [searchParams, setValue]);
 
     // Privacy consent
     const [privacyAccepted, setPrivacyAccepted] = useState(false);
@@ -92,6 +118,8 @@ export default function ViabilityFormPage() {
         } catch (err: any) {
             if (err.response && err.response.status === 404) {
                 setSubmissionStatus('task_not_found');
+            } else if (err.response && err.response.status === 409) {
+                setSubmissionStatus('already_submitted');
             } else if (err.response && err.response.status === 400 && err.response.data?.error) {
                 setErrorMessage(err.response.data.error);
                 setSubmissionStatus('error');
@@ -196,6 +224,39 @@ export default function ViabilityFormPage() {
                         <button
                             onClick={() => router.push('/')}
                             className="w-full bg-[#28A77D] hover:bg-emerald-600 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+                        >
+                            Volver al Inicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (submissionStatus === 'already_submitted') {
+        return (
+            <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans">
+                <header className="bg-white border-b border-slate-100 flex-shrink-0">
+                    <div className="container mx-auto px-4 md:px-6 py-2 md:py-3 flex justify-center">
+                        <Link href="/" className="flex items-center gap-2 font-bold text-lg md:text-xl text-[#163C2E] hover:opacity-80 transition-opacity w-fit">
+                            <Home className="w-5 h-5 text-[#28A77D]" />
+                            FórmulaHogar
+                        </Link>
+                    </div>
+                </header>
+
+                <div className="flex-1 flex items-center justify-center px-4 py-12">
+                    <div className="bg-white p-10 rounded-3xl shadow-xl max-w-md w-full text-center border border-slate-100">
+                        <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <CheckCircle2 className="w-10 h-10 text-amber-500" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-[#163C2E] mb-4">Documentación ya enviada</h2>
+                        <p className="text-slate-600 mb-8 leading-relaxed">
+                            Ya hemos recibido tu documentación anteriormente. Nuestro equipo la está revisando y se pondrá en contacto contigo en breve.
+                        </p>
+                        <button
+                            onClick={() => router.push('/')}
+                            className="w-full bg-[#163C2E] hover:bg-slate-800 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg"
                         >
                             Volver al Inicio
                         </button>

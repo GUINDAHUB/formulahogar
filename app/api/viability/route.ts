@@ -147,8 +147,10 @@ export async function POST(req: Request) {
         }
 
         // Strategy 2: Fallback - fetch and scan tasks (paginated)
-        if (!targetTaskId) {
-            console.log('[Viability] Custom field search failed, scanning tasks...');
+        // ⚠ Only runs when phoneFieldId is NOT set.
+        // If phoneFieldId IS configured, Strategy 1 already tried all phone variations → trust that result.
+        if (!targetTaskId && !phoneFieldId) {
+            console.log('[Viability] No phoneFieldId configured, scanning tasks as fallback...');
 
             let page = 0;
             const maxPages = 20; // Limit to 2000 tasks max to avoid infinite loops
@@ -206,7 +208,25 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        // --- 4. Upload Files (with auto-rename) ---
+        // --- 4. Check for existing attachments (prevent duplicates) ---
+        try {
+            const taskDetails = await axios.get(`${CLICKUP_API_BASE}/task/${targetTaskId}`, {
+                headers: { Authorization: apiKey },
+            });
+            const attachments: any[] = taskDetails.data?.attachments ?? [];
+            if (attachments.length > 0) {
+                console.warn(`[Viability] ✗ Task ${targetTaskId} already has ${attachments.length} attachment(s). Blocking.`);
+                return NextResponse.json(
+                    { error: 'already_submitted' },
+                    { status: 409 }
+                );
+            }
+        } catch (error: any) {
+            // If we can't read attachments, proceed anyway (fail-open)
+            console.warn('[Viability] ⚠ Could not fetch task details to check attachments:', error.message);
+        }
+
+        // --- 5. Upload Files (with auto-rename) ---
 
         // Helper: normalize a string to a URL/filename-safe slug
         const slugify = (str: string) =>
@@ -269,7 +289,7 @@ export async function POST(req: Request) {
         try {
             await axios.put(
                 `${CLICKUP_API_BASE}/task/${targetTaskId}`,
-                { status: 'documentación' },
+                { status: 'DOCUMENTACIÓN' },
                 { headers: { Authorization: apiKey, 'Content-Type': 'application/json' } }
             );
             console.log(`[Viability] ✓ Status updated to DOCUMENTACIÓN for task ${targetTaskId}`);
