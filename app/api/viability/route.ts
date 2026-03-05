@@ -42,6 +42,7 @@ export async function POST(req: Request) {
         const formData = await req.formData();
         const phone = formData.get('phone') as string;
         const employmentStatus = formData.get('employmentStatus') as EmploymentStatus;
+        const purchaseType = formData.get('purchaseType') as string;
 
         // --- 1. Validation ---
         if (!phone) {
@@ -248,44 +249,21 @@ export async function POST(req: Request) {
             console.warn('[Viability] ⚠ Could not fetch task details to check attachments:', error.message);
         }
 
-        // --- 5. Upload Files (with auto-rename) ---
+        // --- 5. Upload Files (without renaming) ---
 
-        // Helper: normalize a string to a URL/filename-safe slug
-        const slugify = (str: string) =>
-            str
-                .normalize('NFD')                      // decompose accented chars
-                .replace(/[\u0300-\u036f]/g, '')       // strip diacritics
-                .toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, '')          // remove non-alphanumeric
-                .trim()
-                .replace(/\s+/g, '-');                  // spaces → hyphens
-
-        // Helper: map form field key to a human-readable doc type slug
-        const DOC_SLUG: Record<string, string> = {
-            vida_laboral: 'vida-laboral',
-            trimestrales: 'trimestrales',
-            renta: 'renta',
-            nominas: 'nominas',
-        };
-
-        const userSlug = targetTaskName ? slugify(targetTaskName) : 'usuario';
+        console.log(`[Viability] Uploading ${files.length} files to task ${targetTaskId}...`);
 
         // Build a map of key → file for entries that start with 'file_'
         const fileEntries = Array.from(formData.entries()).filter(([key]) => key.startsWith('file_'));
 
-        console.log(`[Viability] Uploading ${files.length} files to task ${targetTaskId} as user "${userSlug}"...`);
-
         const uploadPromises = fileEntries.map(async ([key, rawFile]) => {
             const file = rawFile as File;
-            const docKey = key.replace(/^file_/, '');
-            const docSlug = DOC_SLUG[docKey] ?? docKey.replace(/_/g, '-');
-            const ext = file.name.split('.').pop()?.toLowerCase() ?? 'pdf';
-            const newName = `${docSlug}-${userSlug}.${ext}`;
 
-            console.log(`[Viability] Renaming "${file.name}" → "${newName}"`);
+            console.log(`[Viability] Uploading "${file.name}"`);
 
             const body = new FormData();
-            body.append('attachment', file as unknown as Blob, newName);
+            // Upload with original filename
+            body.append('attachment', file as unknown as Blob, file.name);
 
             try {
                 const response = await fetch(`${CLICKUP_API_BASE}/task/${targetTaskId}/attachment`, {
@@ -295,13 +273,13 @@ export async function POST(req: Request) {
                 });
 
                 if (response.ok) {
-                    console.log(`[Viability] ✓ Uploaded: ${newName}`);
+                    console.log(`[Viability] ✓ Uploaded: ${file.name}`);
                 } else {
                     const error = await response.text();
-                    console.warn(`[Viability] ✗ Failed to upload ${newName}: ${response.status}`, error);
+                    console.warn(`[Viability] ✗ Failed to upload ${file.name}: ${response.status}`, error);
                 }
             } catch (error: any) {
-                console.error(`[Viability] ✗ Network error uploading ${newName}:`, error.message);
+                console.error(`[Viability] ✗ Network error uploading ${file.name}:`, error.message);
             }
         });
 

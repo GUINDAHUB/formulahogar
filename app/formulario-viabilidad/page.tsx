@@ -10,10 +10,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // --- Types ---
 type EmploymentStatus = 'autonomo' | 'cuenta_ajena';
+type PurchaseType = 'solo' | 'acompanado';
 
 interface IFormInput {
     phone: string;
     employmentStatus: EmploymentStatus;
+    purchaseType: PurchaseType;
 }
 
 export default function ViabilityFormPage() {
@@ -59,6 +61,7 @@ function ViabilityFormContent() {
     const [privacyTouched, setPrivacyTouched] = useState(false);
 
     const employmentStatus = watch('employmentStatus');
+    const purchaseType = watch('purchaseType');
 
     const isValidPhone = (phone: string) => {
         const digits = phone.replace(/\D/g, '');
@@ -89,9 +92,10 @@ function ViabilityFormContent() {
         // Prepend +34 manually as in the calculator logic
         formData.append('phone', `+34 ${data.phone}`);
         formData.append('employmentStatus', data.employmentStatus);
+        formData.append('purchaseType', data.purchaseType);
 
         // Validate Files
-        const requiredFiles = getRequiredFiles(data.employmentStatus);
+        const requiredFiles = getRequiredFiles(data.employmentStatus, data.purchaseType);
         const missingFiles = requiredFiles.filter(key => !selectedFiles[key]);
 
         if (missingFiles.length > 0) {
@@ -146,12 +150,18 @@ function ViabilityFormContent() {
         }
     };
 
-    const getRequiredFiles = (status: EmploymentStatus) => {
-        if (status === 'autonomo') {
-            return ['vida_laboral', 'trimestrales', 'renta'];
-        } else {
-            return ['vida_laboral', 'nominas', 'renta'];
+    const getRequiredFiles = (status: EmploymentStatus, type: PurchaseType) => {
+        const baseFiles = status === 'autonomo' 
+            ? ['vida_laboral', 'trimestrales', 'renta']
+            : ['vida_laboral', 'nominas', 'renta'];
+
+        if (type === 'acompanado') {
+            // Si compra acompañado, duplicar todos los documentos para la segunda persona
+            const secondPersonFiles = baseFiles.map(file => `${file}_persona2`);
+            return [...baseFiles, ...secondPersonFiles];
         }
+
+        return baseFiles;
     };
 
     // --- Render Functions ---
@@ -396,9 +406,42 @@ function ViabilityFormContent() {
                             {errors.employmentStatus && <p className="text-red-500 text-sm mt-2 font-medium flex items-center gap-1"><XCircle className="w-4 h-4" /> Selecciona tu situación laboral</p>}
                         </div>
 
+                        {/* Tipo de Compra */}
+                        <div>
+                            <label className="block text-sm font-bold text-[#163C2E] mb-3">¿Compras solo o acompañado?</label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${purchaseType === 'solo' ? 'border-[#28A77D] bg-emerald-50/50 shadow-sm' : 'border-slate-100 hover:border-[#28A77D]/50 hover:bg-slate-50'}`}>
+                                    <input
+                                        {...register('purchaseType', { required: true })}
+                                        type="radio"
+                                        value="solo"
+                                        className="sr-only"
+                                    />
+                                    <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${purchaseType === 'solo' ? 'border-[#28A77D]' : 'border-slate-300'}`}>
+                                        {purchaseType === 'solo' && <div className="w-3 h-3 rounded-full bg-[#28A77D]" />}
+                                    </div>
+                                    <span className={`font-bold ${purchaseType === 'solo' ? 'text-[#163C2E]' : 'text-slate-600'}`}>Compro Solo</span>
+                                </label>
+
+                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${purchaseType === 'acompanado' ? 'border-[#28A77D] bg-emerald-50/50 shadow-sm' : 'border-slate-100 hover:border-[#28A77D]/50 hover:bg-slate-50'}`}>
+                                    <input
+                                        {...register('purchaseType', { required: true })}
+                                        type="radio"
+                                        value="acompanado"
+                                        className="sr-only"
+                                    />
+                                    <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${purchaseType === 'acompanado' ? 'border-[#28A77D]' : 'border-slate-300'}`}>
+                                        {purchaseType === 'acompanado' && <div className="w-3 h-3 rounded-full bg-[#28A77D]" />}
+                                    </div>
+                                    <span className={`font-bold ${purchaseType === 'acompanado' ? 'text-[#163C2E]' : 'text-slate-600'}`}>Compro Acompañado</span>
+                                </label>
+                            </div>
+                            {errors.purchaseType && <p className="text-red-500 text-sm mt-2 font-medium flex items-center gap-1"><XCircle className="w-4 h-4" /> Selecciona si compras solo o acompañado</p>}
+                        </div>
+
                         {/* Archivos Condicionales */}
                         <AnimatePresence>
-                            {employmentStatus && (
+                            {employmentStatus && purchaseType && (
                                 <motion.div
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
@@ -410,7 +453,7 @@ function ViabilityFormContent() {
                                             <div className="p-2 bg-[#28A77D]/10 rounded-lg">
                                                 <Upload className="w-5 h-5 text-[#28A77D]" />
                                             </div>
-                                            Documentación Requerida
+                                            Documentación Requerida {purchaseType === 'acompanado' && '- Persona 1'}
                                         </h3>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -436,6 +479,40 @@ function ViabilityFormContent() {
                                                 </div>
                                             )}
                                         </div>
+
+                                        {/* Segunda Persona */}
+                                        {purchaseType === 'acompanado' && (
+                                            <>
+                                                <h3 className="text-lg font-bold text-[#163C2E] mb-6 mt-8 flex items-center gap-3">
+                                                    <div className="p-2 bg-[#28A77D]/10 rounded-lg">
+                                                        <Upload className="w-5 h-5 text-[#28A77D]" />
+                                                    </div>
+                                                    Documentación Requerida - Persona 2
+                                                </h3>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <div className="col-span-1 md:col-span-2">
+                                                        {renderFileInput('vida_laboral_persona2', 'Vida Laboral (Actualizada) - Persona 2')}
+                                                    </div>
+
+                                                    <div className="col-span-1 md:col-span-2">
+                                                        {renderFileInput('renta_persona2', 'Última Declaración de la Renta - Persona 2')}
+                                                    </div>
+
+                                                    {employmentStatus === 'autonomo' && (
+                                                        <div className="col-span-1 md:col-span-2">
+                                                            {renderFileInput('trimestrales_persona2', 'Últimas 3 Declaraciones Trimestrales (IVA/IRPF) - Persona 2')}
+                                                        </div>
+                                                    )}
+
+                                                    {employmentStatus === 'cuenta_ajena' && (
+                                                        <div className="col-span-1 md:col-span-2">
+                                                            {renderFileInput('nominas_persona2', 'Últimas 3 Nóminas - Persona 2')}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </motion.div>
                             )}
