@@ -236,7 +236,7 @@ export async function POST(req: Request) {
                 headers: { Authorization: apiKey },
             });
             const attachments: any[] = taskDetails.data?.attachments ?? [];
-            if (attachments.length > 0) {
+            if (attachments.length > 1) {
                 console.warn(`[Viability] ✗ Task ${targetTaskId} already has ${attachments.length} attachment(s). Blocking.`);
                 await sendWebhook(phone, 'error', 'Documentación ya enviada previamente (tarea con adjuntos existentes)');
                 return NextResponse.json(
