@@ -40,11 +40,17 @@ const LandingPage = () => {
       {/* --- HERO SECTION --- */}
       <header className="relative min-h-[100svh] flex items-center overflow-hidden">
         {/* Background Image — replace with your own documentary-style photography */}
-        <img
-          src="/hero-house.jpg"
-          alt="Pareja feliz mudándose a su nuevo hogar"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        <picture>
+          <source
+            media="(max-width: 767px)"
+            srcSet="/cesion-hero-mobile.jpg"
+          />
+          <img
+            src="/cesion-hero-desktop.jpg"
+            alt="Pareja feliz mudándose a su nuevo hogar"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </picture>
 
         {/* Gradient overlay — white from left for text readability, transparent on right to reveal photo */}
         <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white via-white/95 to-white/50 lg:via-white/80 lg:to-transparent" />

@@ -59,6 +59,15 @@ const Navbar = () => {
     };
 
     const targetId = sectionMap[id] || id;
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
+      sendGTMEvent({ event: 'buttonClicked', value: event });
+      return;
+    }
+
     if (pathname !== '/') {
       window.location.href = `/#${targetId}`;
       setIsMenuOpen(false);
@@ -66,16 +75,22 @@ const Navbar = () => {
       return;
     }
 
-    const element = document.getElementById(targetId);
-
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
     setIsMenuOpen(false);
     sendGTMEvent({ event: 'buttonClicked', value: event });
   };
 
-  const navItems = ['Cómo funciona', 'Ventajas', 'FAQ'];
+  const navItems =
+    pathname === '/alquiler-opcion-compra'
+      ? [
+          { label: 'Cómo funciona', id: 'como-funciona' },
+          { label: 'Ventajas', id: 'ventajas' },
+          { label: 'Reseñas', id: 'reseñas' },
+        ]
+      : [
+          { label: 'Cómo funciona', id: 'cómo-funciona' },
+          { label: 'Ventajas', id: 'ventajas' },
+          { label: 'FAQ', id: 'faq' },
+        ];
 
   return (
     <>
@@ -133,23 +148,45 @@ const Navbar = () => {
                   <div className="bg-white rounded-xl shadow-xl p-2 border border-[#D6D6D6] flex flex-col gap-1 overflow-hidden">
                     <Link
                       href="/"
-                      className="block px-4 py-3 rounded-lg hover:bg-[#EBEBEB] transition-colors group/item"
+                      className={cn(
+                        'block px-4 py-3 rounded-lg transition-colors group/item',
+                        isActivePath('/')
+                          ? 'bg-[#BFFF00]'
+                          : 'hover:bg-[#EBEBEB]',
+                      )}
                     >
-                      <div className="text-sm font-bold text-[#141313] group-hover/item:text-[#141313]">
+                      <div className="text-sm font-bold text-[#141313]">
                         Cesión de Uso
                       </div>
-                      <div className="text-xs text-[#9D9D9D] mt-0.5">
+                      <div
+                        className={cn(
+                          'text-xs mt-0.5',
+                          isActivePath('/') ? 'text-[#545454]' : 'text-[#9D9D9D]',
+                        )}
+                      >
                         Compra ya, paga después
                       </div>
                     </Link>
                     <Link
                       href="/alquiler-opcion-compra"
-                      className="block px-4 py-3 rounded-lg hover:bg-[#EBEBEB] transition-colors group/item"
+                      className={cn(
+                        'block px-4 py-3 rounded-lg transition-colors group/item',
+                        isActivePath('/alquiler-opcion-compra')
+                          ? 'bg-[#BFFF00]'
+                          : 'hover:bg-[#EBEBEB]',
+                      )}
                     >
-                      <div className="text-sm font-bold text-[#141313] group-hover/item:text-[#141313]">
+                      <div className="text-sm font-bold text-[#141313]">
                         Alquiler con Opción a Compra
                       </div>
-                      <div className="text-xs text-[#9D9D9D] mt-0.5">
+                      <div
+                        className={cn(
+                          'text-xs mt-0.5',
+                          isActivePath('/alquiler-opcion-compra')
+                            ? 'text-[#545454]'
+                            : 'text-[#9D9D9D]',
+                        )}
+                      >
                         Tu entrada, mes a mes
                       </div>
                     </Link>
@@ -159,18 +196,18 @@ const Navbar = () => {
 
               {navItems.map((item) => (
                 <button
-                  key={item}
+                  key={item.label}
                   onClick={() =>
                     scrollToSection(
-                      item.toLowerCase().replace(' ', '-'),
-                      item.toLowerCase().replace(' ', '-') + '-menu',
+                      item.id,
+                      `${item.id}-menu`,
                     )
                   }
                   className={cn(
                     'text-sm font-semibold text-[#545454] hover:text-[#141313] transition-all px-3 py-2 rounded-lg hover:bg-[#EBEBEB] hover:underline underline-offset-4 decoration-[#141313]/40',
                   )}
                 >
-                  {item}
+                  {item.label}
                 </button>
               ))}
               <a
@@ -251,11 +288,11 @@ const Navbar = () => {
 
                 {navItems.map((item) => (
                   <button
-                    key={item}
+                    key={item.label}
                     onClick={() =>
                       scrollToSection(
-                        item.toLowerCase().replace(' ', '-'),
-                        item.toLowerCase().replace(' ', '-') + '-menu',
+                        item.id,
+                        `${item.id}-menu`,
                       )
                     }
                     className={cn(
@@ -263,7 +300,7 @@ const Navbar = () => {
                       'text-[#545454] hover:bg-[#EBEBEB] hover:text-[#141313]',
                     )}
                   >
-                    {item}
+                    {item.label}
                   </button>
                 ))}
                 <a

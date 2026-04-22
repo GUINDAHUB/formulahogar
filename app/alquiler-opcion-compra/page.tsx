@@ -37,11 +37,17 @@ const AlquilerOpcionCompraPage = () => {
 
       {/* --- HERO SECTION --- */}
       <header className="relative min-h-[100svh] flex items-center overflow-hidden">
-        <img
-          src="/hero-house.png"
-          alt="Fachada de vivienda para alquiler con opción a compra"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        <picture>
+          <source
+            media="(max-width: 767px)"
+            srcSet="/aoc-hero-mobile.jpg"
+          />
+          <img
+            src="/aoc-hero-desktop.jpg"
+            alt="Fachada de vivienda para alquiler con opción a compra"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </picture>
         <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white via-white/95 to-white/50 lg:via-white/80 lg:to-transparent" />
 
         <div className="relative z-10 container mx-auto px-5 sm:px-6">
