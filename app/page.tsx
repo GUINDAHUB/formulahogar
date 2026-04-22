@@ -2,32 +2,28 @@
 
 import React from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import {
-  Home,
-  TrendingUp,
+  TrendUp,
   CheckCircle,
   ArrowRight,
-  ChevronDown,
-  Users
-} from 'lucide-react';
+  CaretDown,
+} from '@phosphor-icons/react';
 import Navbar from '@/components/Navbar';
-import LogoSlider from '@/components/LogoSlider';
-import ReviewsSlider from '@/components/ReviewsSlider';
-import VideoSection from '@/components/VideoSection';
+import GrainOverlay from '@/components/GrainOverlay';
 import Footer from '@/components/Footer';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { sendGTMEvent } from '@next/third-parties/google'
 
-const LandingPage = () => {
-  const colors = {
-    darkGreen: '#163C2E',
-    lightGreen: '#28A77D',
-    white: '#FFFFFF',
-    offWhite: '#F8FAFC',
-    textDark: '#1E293B',
-    textLight: '#94A3B8'
-  };
+const VideoSection = dynamic(() => import('@/components/VideoSection'), {
+  ssr: false,
+});
 
+const ReviewsSlider = dynamic(() => import('@/components/ReviewsSlider'), {
+  ssr: false,
+});
+
+const LandingPage = () => {
   const scrollToSection = (id: string, event: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -38,138 +34,83 @@ const LandingPage = () => {
 
 
   return (
-    <div className="font-sans antialiased text-slate-800 bg-white selection:bg-[#28A77D] selection:text-white">
+    <div className="font-sans antialiased text-[#141313] bg-white selection:bg-[#BFFF00] selection:text-[#141313]">
       <Navbar />
 
       {/* --- HERO SECTION --- */}
-      <header className="relative pt-32 pb-20 lg:pt-40 lg:pb-16 overflow-hidden" style={{ backgroundColor: colors.darkGreen }}>
-        {/* Background decorative elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none"></div>
+      <header className="relative min-h-[100svh] flex items-center overflow-hidden">
+        {/* Background Image — replace with your own documentary-style photography */}
+        <img
+          src="/hero-house.jpg"
+          alt="Pareja feliz mudándose a su nuevo hogar"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <div className="lg:w-1/2 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-[#28A77D] text-sm font-semibold mb-6 border border-[#28A77D]/30 backdrop-blur-sm animate-fade-in-up">
-                <span className="w-2 h-2 rounded-full bg-[#28A77D] animate-pulse"></span>
-                Revolucionamos el acceso a la vivienda
-              </div>
-              <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight mb-6">
-                Tu primera vivienda, <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#28A77D] to-emerald-300">
-                  sin la barrera de la entrada
-                </span>
-              </h1>
-              <p className="text-lg lg:text-xl text-slate-300 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                ¿Puedes pagar una hipoteca pero no la entrada? Transformamos el alquiler futuro en tu entrada actual. Conviértete en propietario desde el día 1 con tan solo un 5% de ahorro.
-              </p>
+        {/* Gradient overlay — white from left for text readability, transparent on right to reveal photo */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white via-white/95 to-white/50 lg:via-white/80 lg:to-transparent" />
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <a
-                  href="/calculadora"
-                  className="px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all transform hover:translate-y-[-2px] hover:shadow-2xl shadow-lg hover:shadow-[#28A77D]/20"
-                  style={{ backgroundColor: colors.lightGreen, color: colors.white }}
-                >
-                  Analizar mi caso gratis
-                  <ArrowRight className="w-5 h-5" />
-                </a>
-                <button
-                  onClick={() => scrollToSection('cómo-funciona', 'como-funciona')}
-                  className="px-8 py-4 rounded-xl font-bold text-lg border border-white/20 text-white hover:bg-white/5 transition-all"
-                >
-                  Ver cómo funciona
-                </button>
-              </div>
-
-              <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-400">
-                <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Usuario" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="w-8 h-8 rounded-full border-2 border-[#163C2E] overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Usuario" className="w-full h-full object-cover" />
-                  </div>
-                </div>
-                <p>Más de <span className="text-white font-bold">500+</span> propietarios felices</p>
-              </div>
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-5 sm:px-6">
+          <div className="max-w-lg pt-24 pb-10 sm:pt-28 lg:max-w-xl lg:py-0">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-[#141313] px-3 py-1.5 text-xs font-semibold text-[#BFFF00] sm:mb-6 sm:px-4 sm:py-2 sm:text-sm">
+              <span className="h-2 w-2 rounded-full bg-[#BFFF00] animate-pulse" />
+              Revolucionamos el acceso a la vivienda
             </div>
 
-            {/* Hero Visual */}
-            <div className="lg:w-1/2 relative">
-              <div className="relative z-10 bg-white rounded-2xl shadow-2xl overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500 border border-slate-100">
-                {/* Image Section */}
-                <div className="relative h-48 w-full">
-                  <img
-                    src="/hero-house.png"
-                    alt="Interior vivienda moderna"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-3 left-4 text-white">
-                    <p className="text-xs font-medium opacity-90">Tu futuro hogar</p>
-                    <p className="font-bold">Madrid, Centro</p>
-                  </div>
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-bold text-[#163C2E]">
-                    DISPONIBLE
-                  </div>
-                </div>
+            <h1 className="mb-5 font-display text-[2rem] font-bold leading-[1.15] text-[#141313] sm:mb-6 sm:text-[2.5rem] sm:leading-tight lg:text-[3.5rem]">
+              Tu primera vivienda, <br />
+              <span className="underline decoration-[#BFFF00] decoration-[6px] underline-offset-4">
+                sin la barrera de la entrada
+              </span>
+            </h1>
 
-                {/* Simulation Content */}
-                <div className="p-6 lg:p-8">
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <h3 className="text-2xl font-bold text-[#163C2E]">Simulación Real</h3>
-                      <p className="text-slate-500 text-sm">Apartamento en Madrid</p>
-                    </div>
-                    <div className="bg-green-100 text-[#163C2E] px-3 py-1 rounded-full text-xs font-bold">
-                      APROBADO
-                    </div>
-                  </div>
+            <p className="mb-7 max-w-xl text-base leading-relaxed text-[#545454] sm:mb-8 sm:text-lg lg:text-xl">
+              ¿Puedes pagar una hipoteca pero no la entrada? Transformamos el alquiler futuro en tu entrada actual. Conviértete en propietario desde el día 1 con tan solo un 5% de ahorro.
+            </p>
 
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
-                      <span className="text-slate-600 font-medium">Precio Vivienda</span>
-                      <span className="text-xl font-bold text-[#163C2E]">200.000€</span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="p-4 rounded-xl border-2 border-slate-100 opacity-50">
-                        <p className="text-xs text-slate-500 uppercase font-bold mb-1">Entrada Tradicional</p>
-                        <p className="text-2xl font-bold text-slate-400">60.000€</p>
-                        <p className="text-xs text-red-400 font-medium mt-1">Necesitas 30%</p>
-                      </div>
-                      <div className="p-4 rounded-xl border-2 bg-[#F0FDF4] border-[#28A77D]">
-                        <p className="text-xs text-[#163C2E] uppercase font-bold mb-1">Entrada Fórmula Hogar</p>
-                        <p className="text-3xl font-bold text-[#28A77D]">0 €</p>
-                        <p className="text-xs text-[#28A77D] font-medium mt-1">Solo necesitas 5%</p>
-                      </div>
-                    </div>
-
-                    <div className="pt-4 border-t border-slate-100">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[#163C2E] flex items-center justify-center text-white">
-                          <CheckCircle className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-[#163C2E]">Propietario desde el día 1</p>
-                          <p className="text-xs text-slate-500">Firmas en notaría inmediatamente</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Floating Badge */}
-              <div className="absolute -bottom-6 -right-6 bg-[#28A77D] text-white p-4 rounded-xl shadow-xl z-20 hidden md:block animate-bounce-slow">
-                <p className="text-xs font-bold opacity-80">AHORRO EN ENTRADA</p>
-                <p className="text-2xl font-bold">-60.000€</p>
-              </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+              <a
+                href="/calculadora"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#BFFF00] px-6 py-3.5 text-base font-bold text-[#141313] transition-all hover:translate-y-[-2px] sm:w-auto sm:px-8 sm:py-4 sm:text-lg cursor-pointer"
+              >
+                Analizar mi caso gratis
+                <ArrowRight size={20} weight="fill" />
+              </a>
+              <button
+                onClick={() => scrollToSection('cómo-funciona', 'como-funciona')}
+                className="w-full rounded-lg border-2 border-[#141313]/20 bg-white/60 backdrop-blur-sm px-6 py-3.5 text-base font-bold text-[#141313] transition-all hover:bg-white/80 sm:w-auto sm:px-8 sm:py-4 sm:text-lg cursor-pointer"
+              >
+                Ver cómo funciona
+              </button>
             </div>
+
+            <div className="mt-7 flex flex-wrap items-center gap-3 text-xs text-[#545454] sm:mt-8 sm:gap-4 sm:text-sm">
+              <div className="flex -space-x-2">
+                <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white">
+                  <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" className="h-full w-full object-cover" />
+                </div>
+                <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white">
+                  <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" className="h-full w-full object-cover" />
+                </div>
+                <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white">
+                  <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Usuario" className="h-full w-full object-cover" />
+                </div>
+                <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white">
+                  <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Usuario" className="h-full w-full object-cover" />
+                </div>
+              </div>
+              <p>Más de <span className="font-bold text-[#141313]">500+</span> propietarios felices</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Floating stat card — desktop only, over the image area */}
+        <div className="absolute bottom-12 right-12 z-20 hidden lg:block rounded-2xl border border-[#D6D6D6] bg-white/90 p-5 shadow-xl backdrop-blur-sm">
+          <p className="text-xs font-bold uppercase tracking-wide text-[#9D9D9D]">Ahorro medio en entrada</p>
+          <p className="text-3xl font-bold text-[#141313]">-50.000€</p>
+          <div className="mt-1 flex items-center gap-1.5">
+            <CheckCircle size={14} weight="fill" className="text-[#141313]" />
+            <span className="text-xs text-[#545454]">Propietario desde el día 1</span>
           </div>
         </div>
       </header>
@@ -177,20 +118,17 @@ const LandingPage = () => {
       {/* --- VIDEO EXPLAINER --- */}
       <VideoSection playbackId="02LkyVlxls01u2OFEyVqk00ZLuMVNM9FxaBtAfSNQcVr02g" />
 
-      {/* --- TRUST BADGES --- */}
-      {/* <section className="py-10 border-b border-slate-100 bg-white">
-        <div className="container mx-auto px-6">
-          <p className="text-sm font-semibold text-slate-400 mb-8 uppercase tracking-wider text-center">Confianza en nosotros</p>
-          <LogoSlider />
-        </div>
-      </section> */}
-
       {/* --- SOCIAL PROOF / REVIEWS --- */}
-      <section id="reseñas" className="py-20 bg-[#F8FAFC]">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#163C2E] mb-4">Historias reales, viviendas reales</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">Ellos ya consiguieron su casa sin tener que ahorrar durante 10 años.</p>
+      <section id="reseñas" className="relative py-28 bg-white overflow-hidden">
+        <GrainOverlay />
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#9D9D9D] mb-4">Testimonios</p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-[#141313] mb-5 tracking-tight">
+              Historias reales, <br className="hidden sm:block" />
+              <span className="underline decoration-[#BFFF00] decoration-[5px] underline-offset-4">viviendas reales</span>
+            </h2>
+            <p className="text-[#545454] text-lg leading-relaxed">Ellos ya consiguieron su casa sin tener que ahorrar durante 10 años.</p>
           </div>
 
           <ReviewsSlider />
@@ -198,16 +136,14 @@ const LandingPage = () => {
       </section>
 
       {/* --- WHY FORMULA HOGAR --- */}
-      <section id="beneficios" className="py-20 overflow-hidden relative" style={{ backgroundColor: colors.darkGreen }}>
-        {/* Decorative circle */}
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#28A77D] rounded-full opacity-10 blur-3xl"></div>
-
+      <section id="beneficios" className="py-28 overflow-hidden relative bg-[#141313]">
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             <div className="lg:w-1/2">
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-8">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#9D9D9D] mb-4">Ventajas</p>
+              <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-8 tracking-tight">
                 ¿Por qué elegir <br />
-                <span className="text-[#28A77D]">Fórmula Hogar?</span>
+                <span className="underline decoration-[#BFFF00] decoration-[5px] underline-offset-4">Fórmula Hogar</span>?
               </h2>
               <ul className="space-y-6">
                 {[
@@ -217,15 +153,15 @@ const LandingPage = () => {
                   "Compras sin tener que aportar enormes cantidades de dinero para la entrada."
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-4">
-                    <div className="mt-1 p-1 bg-[#28A77D] rounded-full">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                    <div className="mt-1 p-1 bg-[#BFFF00] rounded-full">
+                      <CheckCircle size={16} weight="fill" className="text-[#141313]" />
                     </div>
-                    <span className="text-lg text-slate-200">{item}</span>
+                    <span className="text-lg text-[#D6D6D6]">{item}</span>
                   </li>
                 ))}
               </ul>
               <div className="mt-10">
-                <a href="/calculadora" className="inline-block px-8 py-4 bg-[#28A77D] text-white font-bold rounded-xl hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-500/20">
+                <a href="/calculadora" className="inline-block px-8 py-4 bg-[#BFFF00] text-[#141313] font-bold rounded-lg transition-colors cursor-pointer">
                   Quiero agendar una llamada
                 </a>
               </div>
@@ -233,7 +169,7 @@ const LandingPage = () => {
 
             <div className="lg:w-1/2">
               {/* Visual Representation of Savings & Growth */}
-              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 relative overflow-hidden group hover:border-[#28A77D]/30 transition-colors duration-500">
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 relative overflow-hidden group hover:border-[#BFFF00]/30 transition-colors duration-500">
                 {/* Background Grid Pattern */}
                 <div className="absolute inset-0 opacity-10 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
@@ -241,28 +177,26 @@ const LandingPage = () => {
                   <div className="flex justify-between items-start mb-8">
                     <div>
                       <h3 className="text-white text-xl font-bold flex items-center gap-2 mb-2">
-                        <TrendingUp className="text-[#28A77D]" />
+                        <TrendUp size={24} weight="fill" className="text-[#BFFF00]" />
                         Plusvalía Automática
                       </h3>
-                      <p className="text-slate-400 text-sm max-w-xs">
+                      <p className="text-[#9D9D9D] text-sm max-w-xs">
                         Tu vivienda se revaloriza mientras pagas tu entrada.
                       </p>
                     </div>
-                    <div className="bg-[#28A77D]/20 text-[#28A77D] px-3 py-1 rounded-lg text-xs font-bold border border-[#28A77D]/30 animate-pulse">
+                    <div className="bg-[#BFFF00]/20 text-[#BFFF00] px-3 py-1 rounded-lg text-xs font-bold border border-[#BFFF00]/30 animate-pulse">
                       +12.5% Estimado
                     </div>
                   </div>
 
                   {/* Chart Container */}
                   <div className="relative h-60 w-full mt-4">
-                    {/* Wrapper for SVG and Dots ensuring shared coordinate space */}
                     <div className="absolute inset-0 z-10">
-                      {/* SVG Graph */}
                       <svg className="w-full h-full overflow-visible" viewBox="0 0 100 60" preserveAspectRatio="none">
                         <defs>
                           <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#28A77D" stopOpacity="0.5" />
-                            <stop offset="100%" stopColor="#28A77D" stopOpacity="0" />
+                            <stop offset="0%" stopColor="#BFFF00" stopOpacity="0.5" />
+                            <stop offset="100%" stopColor="#BFFF00" stopOpacity="0" />
                           </linearGradient>
                           <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
                             <feGaussianBlur stdDeviation="2" result="blur" />
@@ -270,58 +204,49 @@ const LandingPage = () => {
                           </filter>
                         </defs>
 
-                        {/* Grid Lines Horizontal */}
                         <line x1="0" y1="15" x2="100" y2="15" stroke="white" strokeOpacity="0.05" strokeDasharray="2" />
                         <line x1="0" y1="30" x2="100" y2="30" stroke="white" strokeOpacity="0.05" strokeDasharray="2" />
                         <line x1="0" y1="45" x2="100" y2="45" stroke="white" strokeOpacity="0.05" strokeDasharray="2" />
 
-                        {/* Area Path */}
                         <path
                           d="M0,45 C30,42 60,25 100,10 V60 H0 Z"
                           fill="url(#chartGradient)"
                           className="transition-all duration-1000 ease-out"
                         />
 
-                        {/* Line Path */}
                         <path
                           d="M0,45 C30,42 60,25 100,10"
                           fill="none"
-                          stroke="#28A77D"
+                          stroke="#BFFF00"
                           strokeWidth="0.8"
                           strokeLinecap="round"
                           filter="url(#glow)"
-                          className="drop-shadow-[0_0_8px_rgba(40,167,125,0.5)]"
+                          className="drop-shadow-[0_0_8px_rgba(191,255,0,0.5)]"
                         />
                       </svg>
 
-                      {/* Absolute Positioned Dots (Inside the same wrapper as SVG) */}
-                      {/* Start Point - Corresponds to 0,45 in 100x60 viewBox -> Top: 75%, Left: 0% */}
-                      <div className="absolute left-0 top-[75%] w-3 h-3 bg-white border-2 border-[#28A77D] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-emerald-500/50 z-20"></div>
+                      <div className="absolute left-0 top-[75%] w-3 h-3 bg-white border-2 border-[#BFFF00] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg z-20"></div>
 
-                      {/* End Point - Corresponds to 100,10 in 100x60 viewBox -> Top: 16.66%, Left: 100% */}
-                      <div className="absolute right-0 top-[16.66%] w-3 h-3 bg-[#28A77D] border-2 border-white rounded-full translate-x-1/2 -translate-y-1/2 shadow-lg shadow-emerald-500/50 z-20 animate-pulse">
-                        <div className="absolute inset-0 w-full h-full bg-[#28A77D] rounded-full animate-ping opacity-30"></div>
+                      <div className="absolute right-0 top-[16.66%] w-3 h-3 bg-[#BFFF00] border-2 border-white rounded-full translate-x-1/2 -translate-y-1/2 shadow-lg z-20 animate-pulse">
+                        <div className="absolute inset-0 w-full h-full bg-[#BFFF00] rounded-full animate-ping opacity-30"></div>
                       </div>
                     </div>
 
-                    {/* Labels placed absolutely relative to the main container */}
                     <div className="absolute top-0 right-0 text-right z-30 -mt-6">
-                      <div className="bg-[#163C2E] border border-[#28A77D] px-3 py-1 rounded-lg shadow-lg">
-                        <p className="text-[#28A77D] font-bold text-lg leading-none">225.000€</p>
-                        <p className="text-[10px] text-slate-300 uppercase tracking-wider mt-1">Valor Futuro</p>
+                      <div className="bg-[#141313] border border-[#BFFF00] px-3 py-1 rounded-lg shadow-lg">
+                        <p className="text-[#BFFF00] font-bold text-lg leading-none">225.000€</p>
+                        <p className="text-[10px] text-[#D6D6D6] uppercase tracking-wider mt-1">Valor Futuro</p>
                       </div>
                     </div>
 
-                    {/* Moved Start Label higher (approx 55% top) to sit above the line start (75%) */}
                     <div className="absolute top-[55%] left-0 z-30 -translate-y-1/2">
                       <div className="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-lg border border-white/10">
                         <p className="text-white font-bold text-lg leading-none">200.000€</p>
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Precio Compra</p>
+                        <p className="text-[10px] text-[#9D9D9D] uppercase tracking-wider mt-1">Precio Compra</p>
                       </div>
                     </div>
 
-                    {/* X Axis Labels */}
-                    <div className="absolute bottom-0 w-full flex justify-between text-[10px] text-slate-500 font-medium uppercase tracking-widest z-30">
+                    <div className="absolute bottom-0 w-full flex justify-between text-[10px] text-[#9D9D9D] font-medium uppercase tracking-widest z-30">
                       <span>Hoy</span>
                       <span>Año 1</span>
                       <span>Año 2</span>
@@ -335,42 +260,16 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* --- COMPARISON TABLE --- */}
-      {/* <section id="comparativa" className="py-24 bg-slate-50">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#163C2E]">La Comparativa Definitiva</h2>
-            <p className="text-slate-600 mt-4">¿Por qué seguir alquilando si puedes comprar?</p>
-          </div>
-
-          <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
-            <div className="grid grid-cols-3 bg-[#163C2E] text-white p-6 text-sm md:text-base font-bold text-center">
-              <div className="flex items-center justify-center">Concepto</div>
-              <div className="flex items-center justify-center opacity-70">Tradicional</div>
-              <div className="flex items-center justify-center text-[#28A77D] bg-white/10 rounded-lg py-2">Fórmula Hogar</div>
-            </div>
-
-            {[
-              { label: "Ahorro Necesario", trad: "30% (Entrada + Gastos)", formula: "Solo 5%", highlight: true },
-              { label: "Propiedad", trad: "Inmediata", formula: "Inmediata (Desde día 1)" },
-              { label: "Uso de la vivienda", trad: "Inmediato", formula: "Tras 2-3 años (Cesión)" },
-              { label: "Esfuerzo Financiero", trad: "Muy Alto", formula: "Muy Bajo", highlight: true },
-              { label: "Revalorización", trad: "Sí", formula: "Sí (Ganas desde la firma)" },
-            ].map((row, idx) => (
-              <div key={idx} className={`grid grid-cols-3 p-6 text-center border-b border-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                <div className="text-left font-semibold text-slate-700">{row.label}</div>
-                <div className="text-slate-500">{row.trad}</div>
-                <div className={`font-bold ${row.highlight ? 'text-[#28A77D]' : 'text-[#163C2E]'}`}>{row.formula}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
       {/* --- FAQ SECTION --- */}
-      <section id="faq" className="py-20 bg-white">
-        <div className="container mx-auto px-6 max-w-3xl">
-          <h2 className="text-3xl font-bold text-[#163C2E] text-center mb-12">Preguntas Frecuentes</h2>
+      <section id="faq" className="relative py-28 bg-white overflow-hidden">
+        <GrainOverlay />
+        <div className="container mx-auto px-6 max-w-3xl relative z-10">
+          <div className="text-center mb-12">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#9D9D9D] mb-4">Resolvemos tus dudas</p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-[#141313] tracking-tight">
+              Preguntas <span className="underline decoration-[#BFFF00] decoration-[5px] underline-offset-4">Frecuentes</span>
+            </h2>
+          </div>
 
           <div className="space-y-4">
             {[
@@ -381,12 +280,12 @@ const LandingPage = () => {
               { q: "¿Puedo elegir la vivienda que quiero comprar?", a: "Sí. Tú eliges la vivienda y nuestro equipo valida que el precio sea coherente con la tasación bancaria y que la operación sea viable. FH no vende stock: te guiamos para que compres tu casa, no una que nos interese a nosotros. " },
               { q: "¿Qué pasa si quiero vender mi vivienda actual?", a: "Te ayudamos sin coste. Tenemos compradores preaprobados capaces de cerrar rápido operaciones que suelen estar bloqueadas por falta de entrada." }
             ].map((faq, idx) => (
-              <details key={idx} className="group bg-slate-50 rounded-xl p-4 cursor-pointer [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex items-center justify-between font-bold text-[#163C2E] group-hover:text-[#28A77D] transition-colors">
+              <details key={idx} className="group bg-[#EBEBEB] rounded-xl p-4 cursor-pointer [&_summary::-webkit-details-marker]:hidden">
+                <summary className="flex items-center justify-between font-bold text-[#141313] group-hover:text-[#545454] transition-colors">
                   {faq.q}
-                  <ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" />
+                  <CaretDown size={20} weight="fill" className="transition-transform group-open:rotate-180" />
                 </summary>
-                <p className="mt-4 text-slate-600 leading-relaxed text-sm">
+                <p className="mt-4 text-[#545454] leading-relaxed text-sm">
                   {faq.a}
                 </p>
               </details>
@@ -396,20 +295,23 @@ const LandingPage = () => {
       </section>
 
       {/* --- CTA / FORM SECTION --- */}
-      <section id="formulario" className="py-20" style={{ backgroundColor: colors.darkGreen }}>
+      <section id="formulario" className="py-28 bg-[#141313]">
         <div className="container mx-auto px-6 text-center">
           <div className="max-w-3xl mx-auto bg-white rounded-3xl p-8 md:p-12 shadow-2xl">
-            <h2 className="text-3xl font-bold text-[#163C2E] mb-4">¿Listo para ser propietario?</h2>
-            <p className="text-slate-600 mb-8">Calcula en 2 minutos cuánto puedes ahorrar en la entrada de tu vivienda con nuestra calculadora interactiva.</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#9D9D9D] mb-4">Da el primer paso</p>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-[#141313] mb-4 tracking-tight">
+              ¿Listo para ser <span className="underline decoration-[#BFFF00] decoration-[5px] underline-offset-4">propietario</span>?
+            </h2>
+            <p className="text-[#545454] text-lg mb-8">Calcula en 2 minutos cuánto puedes ahorrar en la entrada de tu vivienda.</p>
 
             <a
               href="/calculadora"
-              className="inline-flex items-center gap-3 px-10 py-5 bg-[#28A77D] text-white font-bold rounded-xl text-xl hover:bg-emerald-600 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-[#BFFF00] text-[#141313] font-bold rounded-lg text-xl transition-all hover:scale-105 cursor-pointer"
             >
               Calcular mi ahorro ahora
-              <ArrowRight className="w-6 h-6" />
+              <ArrowRight size={24} weight="fill" />
             </a>
-            <p className="text-xs text-slate-400 mt-6">Sin compromiso • Cálculo instantáneo • 100% gratis</p>
+            <p className="text-xs text-[#9D9D9D] mt-6">Sin compromiso • Cálculo instantáneo • 100% gratis</p>
           </div>
         </div>
       </section>

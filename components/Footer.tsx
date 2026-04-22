@@ -1,17 +1,19 @@
 import React from 'react';
 import Link from 'next/link';
-import { Home } from 'lucide-react';
 
 const Footer = () => {
     return (
-        <footer className="bg-[#0f291e] text-slate-400 py-12 border-t border-white/5">
+        <footer className="bg-[#141313] text-[#9D9D9D] py-12 border-t border-white/5">
             <div className="container mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-                    <div className="flex items-center gap-2 font-bold text-2xl text-white mb-4 md:mb-0">
-                        <Home className="w-6 h-6 text-[#28A77D]" />
-                        FórmulaHogar
+                    <div className="mb-4 md:mb-0">
+                        <img
+                            src="/brand/logo-negative.png"
+                            alt="FórmulaHogar"
+                            className="h-8 w-auto"
+                        />
                     </div>
-                    <div className="flex gap-6 text-sm">
+                    <div className="flex gap-6 text-sm font-medium">
                         <Link href="/politicas#aviso-legal" className="hover:text-white transition-colors">Aviso Legal</Link>
                         <Link href="/politicas#privacidad" className="hover:text-white transition-colors">Privacidad</Link>
                         <a href="#" className="hover:text-white transition-colors">Cookies</a>

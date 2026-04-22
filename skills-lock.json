@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "nextjs-framer-motion-animations": {
+      "source": "tristanmanchester/agent-skills",
+      "sourceType": "github",
+      "computedHash": "ac4c5f6a968308bca75802aeca1dfe399fb6f8a572006f508ea67e59d8e9a3ea"
+    },
+    "ui-ux-pro-max": {
+      "source": "kimny1143/claude-code-template",
+      "sourceType": "github",
+      "computedHash": "e122b7731727f01dfa62f24151fa8265f65aa5573524dab4a4f343e12783c5a3"
+    }
+  }
+}
