@@ -1,15 +1,10 @@
 "use client";
 
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import "@mux/mux-player/themes/minimal";
+import MuxPlayer from '@mux/mux-player-react';
 import { Users, Wallet, Key, House, Play } from '@phosphor-icons/react';
 import GrainOverlay from '@/components/GrainOverlay';
-
-const MuxPlayer = dynamic(() => import('@mux/mux-player-react'), {
-  ssr: false,
-});
 
 interface Step {
   icon: React.ReactNode;
@@ -107,6 +102,7 @@ const VideoSection = ({
                   className="instaplay-theme"
                   streamType="on-demand"
                   playbackId={playbackId}
+                  autoPlay
                   metadata={{
                     video_title: 'Cómo funciona Fórmula Hogar',
                   }}
