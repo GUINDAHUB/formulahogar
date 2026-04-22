@@ -83,7 +83,14 @@ body {
   animation: marquee 40s linear infinite;
 }
 
-/* Subtle animated grain effect */
+/* Subtle grain texture */
+.grain-texture {
+  background-image: radial-gradient(rgba(20, 19, 19, 0.42) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+  will-change: transform;
+}
+
+/* Subtle animated grain drift */
 @keyframes grain {
   0%, 100% { transform: translate(0, 0); }
   10% { transform: translate(-2%, -3%); }
@@ -98,5 +105,22 @@ body {
 }
 
 .animate-grain {
-  animation: grain 8s steps(10) infinite;
+  animation: grain 12s steps(8) infinite;
+}
+
+@media (max-width: 767px) {
+  .animate-marquee {
+    animation-duration: 56s;
+  }
+
+  .animate-grain {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-grain {
+    animation: none !important;
+  }
 }

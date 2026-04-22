@@ -1,10 +1,15 @@
 "use client";
 
-import React from 'react';
-import MuxPlayer from '@mux/mux-player-react';
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import "@mux/mux-player/themes/minimal";
-import { Users, Wallet, Key, House } from '@phosphor-icons/react';
+import { Users, Wallet, Key, House, Play } from '@phosphor-icons/react';
 import GrainOverlay from '@/components/GrainOverlay';
+
+const MuxPlayer = dynamic(() => import('@mux/mux-player-react'), {
+  ssr: false,
+});
 
 interface Step {
   icon: React.ReactNode;
@@ -42,6 +47,8 @@ const VideoSection = ({
     }
   ]
 }: VideoSectionProps) => {
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const posterUrl = `https://image.mux.com/${playbackId}/thumbnail.webp?time=0&width=1280`;
 
   return (
     <section id="cómo-funciona" className="py-28 relative overflow-hidden bg-white">
@@ -92,21 +99,45 @@ const VideoSection = ({
                   border-radius: 50%;
                   backdrop-filter: blur(4px);
                 }
-              `}} />
+              `
+              }} />
 
-              <MuxPlayer
-                className="instaplay-theme"
-                streamType="on-demand"
-                playbackId={playbackId}
-                metadata={{
-                  video_title: 'Cómo funciona Fórmula Hogar',
-                }}
-                primaryColor="#FFFFFF"
-                secondaryColor="#000000"
-                accentColor="#BFFF00"
-                style={{ height: '100%', width: '100%' }}
-                thumbnailTime={0}
-              />
+              {isPlayerReady ? (
+                <MuxPlayer
+                  className="instaplay-theme"
+                  streamType="on-demand"
+                  playbackId={playbackId}
+                  metadata={{
+                    video_title: 'Cómo funciona Fórmula Hogar',
+                  }}
+                  primaryColor="#FFFFFF"
+                  secondaryColor="#000000"
+                  accentColor="#BFFF00"
+                  style={{ height: '100%', width: '100%' }}
+                  thumbnailTime={0}
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsPlayerReady(true)}
+                  className="group/play relative block h-full w-full cursor-pointer"
+                  aria-label="Reproducir vídeo explicativo"
+                >
+                  <Image
+                    src={posterUrl}
+                    alt="Vista previa del vídeo explicativo"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1200px"
+                    className="object-cover"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-black/40 to-black/5" />
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-transform duration-300 group-hover/play:scale-105">
+                      <Play size={34} weight="fill" />
+                    </span>
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         </div>

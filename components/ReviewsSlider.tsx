@@ -9,26 +9,26 @@ const reviews = [
     age: "28 y 30 años",
     text: "Llevábamos años pagando un alquiler altísimo y no podíamos ahorrar para la entrada. Fórmula Hogar nos permitió comprar nuestro piso. Ahora pagamos nuestra propia hipoteca.",
     tag: "Compraron en Madrid",
-    image: "https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=2070&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1556157382-97eda2d62296?q=60&w=240&auto=format&fit=crop"
   },
   {
     name: "Laura D.",
     age: "26 años",
     text: "Pensaba que comprar sola era imposible. Con mis ahorros solo cubría el 7%. Gracias al adelanto de rentas, firmé la semana pasada. ¡Increíble!",
     tag: "Compró en Valencia",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=60&w=240&auto=format&fit=crop"
   },
   {
     name: "Javier M.",
     age: "34 años",
     text: "La transparencia es total. Te explican que cedes el uso unos años, pero la casa ES TUYA desde el notario. Es la decisión financiera más inteligente que he tomado.",
     tag: "Compró en Málaga",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=60&w=240&auto=format&fit=crop"
   }
 ];
 
 // Duplicate enough times for seamless infinite scroll
-const duplicatedReviews = [...reviews, ...reviews, ...reviews, ...reviews];
+const duplicatedReviews = [...reviews, ...reviews];
 
 const ReviewsSlider = () => {
   return (
@@ -64,6 +64,10 @@ const ReviewsSlider = () => {
                     <img
                       src={review.image}
                       alt={review.name}
+                      loading="lazy"
+                      decoding="async"
+                      width={48}
+                      height={48}
                       className="w-full h-full object-cover"
                     />
                   ) : (

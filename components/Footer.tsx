@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Footer = () => {
     return (
@@ -7,9 +8,11 @@ const Footer = () => {
             <div className="container mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
                     <div className="mb-4 md:mb-0">
-                        <img
+                        <Image
                             src="/brand/logo-negative.png"
                             alt="FórmulaHogar"
+                            width={260}
+                            height={48}
                             className="h-8 w-auto"
                         />
                     </div>

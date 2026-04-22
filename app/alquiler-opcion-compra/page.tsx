@@ -2,6 +2,7 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import {
   House,
   CheckCircle,
@@ -37,17 +38,24 @@ const AlquilerOpcionCompraPage = () => {
 
       {/* --- HERO SECTION --- */}
       <header className="relative min-h-[100svh] flex items-center overflow-hidden">
-        <picture>
-          <source
-            media="(max-width: 767px)"
-            srcSet="/aoc-hero-mobile.jpg"
+        <div className="absolute inset-0">
+          <Image
+            src="/aoc-hero-mobile.jpg"
+            alt="Fachada de vivienda para alquiler con opción a compra"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover md:hidden"
           />
-          <img
+          <Image
             src="/aoc-hero-desktop.jpg"
             alt="Fachada de vivienda para alquiler con opción a compra"
-            className="absolute inset-0 h-full w-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="hidden object-cover md:block"
           />
-        </picture>
+        </div>
         <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white via-white/95 to-white/50 lg:via-white/80 lg:to-transparent" />
 
         <div className="relative z-10 container mx-auto px-5 sm:px-6">
@@ -93,6 +101,8 @@ const AlquilerOpcionCompraPage = () => {
                   <img
                     src="https://randomuser.me/api/portraits/men/12.jpg"
                     alt="Usuario"
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -100,6 +110,8 @@ const AlquilerOpcionCompraPage = () => {
                   <img
                     src="https://randomuser.me/api/portraits/women/24.jpg"
                     alt="Usuario"
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -107,6 +119,8 @@ const AlquilerOpcionCompraPage = () => {
                   <img
                     src="https://randomuser.me/api/portraits/men/46.jpg"
                     alt="Usuario"
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -114,6 +128,8 @@ const AlquilerOpcionCompraPage = () => {
                   <img
                     src="https://randomuser.me/api/portraits/women/58.jpg"
                     alt="Usuario"
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { List, X, CaretDown } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -120,9 +121,11 @@ const Navbar = () => {
               className="flex flex-none items-center gap-2 cursor-pointer"
               onClick={() => window.scrollTo(0, 0)}
             >
-              <img
+              <Image
                 src="/brand/logo-color.png"
                 alt="FórmulaHogar"
+                width={260}
+                height={48}
                 className="h-8 w-auto max-w-none shrink-0"
               />
             </Link>

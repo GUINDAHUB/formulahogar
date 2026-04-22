@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import {
   TrendUp,
   CheckCircle,
@@ -12,7 +13,6 @@ import {
 import Navbar from '@/components/Navbar';
 import GrainOverlay from '@/components/GrainOverlay';
 import Footer from '@/components/Footer';
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import { sendGTMEvent } from '@next/third-parties/google'
 
 const VideoSection = dynamic(() => import('@/components/VideoSection'), {
@@ -39,18 +39,24 @@ const LandingPage = () => {
 
       {/* --- HERO SECTION --- */}
       <header className="relative min-h-[100svh] flex items-center overflow-hidden">
-        {/* Background Image — replace with your own documentary-style photography */}
-        <picture>
-          <source
-            media="(max-width: 767px)"
-            srcSet="/cesion-hero-mobile.jpg"
+        <div className="absolute inset-0">
+          <Image
+            src="/cesion-hero-mobile.jpg"
+            alt="Pareja feliz mudándose a su nuevo hogar"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover md:hidden"
           />
-          <img
+          <Image
             src="/cesion-hero-desktop.jpg"
             alt="Pareja feliz mudándose a su nuevo hogar"
-            className="absolute inset-0 h-full w-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="hidden object-cover md:block"
           />
-        </picture>
+        </div>
 
         {/* Gradient overlay — white from left for text readability, transparent on right to reveal photo */}
         <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white via-white/95 to-white/50 lg:via-white/80 lg:to-transparent" />
@@ -93,16 +99,16 @@ const LandingPage = () => {
             <div className="mt-7 flex flex-wrap items-center gap-3 text-xs text-[#545454] sm:mt-8 sm:gap-4 sm:text-sm">
               <div className="flex -space-x-2">
                 <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white">
-                  <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" className="h-full w-full object-cover" />
+                  <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 </div>
                 <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white">
-                  <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" className="h-full w-full object-cover" />
+                  <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 </div>
                 <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white">
-                  <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Usuario" className="h-full w-full object-cover" />
+                  <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Usuario" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 </div>
                 <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white">
-                  <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Usuario" className="h-full w-full object-cover" />
+                  <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Usuario" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 </div>
               </div>
               <p>Más de <span className="font-bold text-[#141313]">500+</span> propietarios felices</p>
