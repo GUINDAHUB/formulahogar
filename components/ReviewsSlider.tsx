@@ -33,55 +33,99 @@ const duplicatedReviews = [...reviews, ...reviews];
 const ReviewsSlider = () => {
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Gradient Masks */}
-      <div className="absolute top-0 left-0 w-24 md:w-40 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-      <div className="absolute top-0 right-0 w-24 md:w-40 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-
-      {/* Marquee Track */}
-      <div
-        className="flex w-max animate-marquee hover:[animation-play-state:paused]"
-      >
-        {duplicatedReviews.map((review, idx) => (
-          <div
-            key={idx}
-            className="flex-none w-[340px] md:w-[400px] p-3"
-          >
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#D6D6D6] hover:shadow-md transition-shadow h-full flex flex-col justify-between">
-              <div>
-                <div className="flex gap-1 mb-4 text-yellow-400">
-                  <Star size={18} weight="fill" />
-                  <Star size={18} weight="fill" />
-                  <Star size={18} weight="fill" />
-                  <Star size={18} weight="fill" />
-                  <Star size={18} weight="fill" />
-                </div>
-                <p className="text-[#545454] mb-6 italic text-lg">&ldquo;{review.text}&rdquo;</p>
-              </div>
-
-              <div className="flex items-center gap-4 pt-4 border-t border-[#EBEBEB] mt-auto">
-                <div className="w-12 h-12 rounded-full bg-[#D6D6D6] overflow-hidden flex items-center justify-center shrink-0 shadow-lg">
-                  {review.image ? (
-                    <img
-                      src={review.image}
-                      alt={review.name}
-                      loading="lazy"
-                      decoding="async"
-                      width={48}
-                      height={48}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-[#9D9D9D] font-bold text-xl">{review.name.charAt(0)}</span>
-                  )}
-                </div>
+      {/* Mobile carousel: autoplay + next card preview */}
+      <div className="md:hidden">
+        <div className="mb-3 text-center text-xs font-semibold uppercase tracking-wide text-[#9D9D9D]">
+          Testimonios reales
+        </div>
+        <div className="flex w-max animate-marquee [animation-duration:32s]">
+          {duplicatedReviews.map((review, idx) => (
+            <div key={idx} className="flex-none w-[80vw] max-w-[320px] p-2">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#D6D6D6] h-full flex flex-col justify-between">
                 <div>
-                  <p className="font-bold text-[#141313] text-lg">{review.name}</p>
-                  <p className="text-xs text-[#545454] font-bold uppercase tracking-wide">{review.tag}</p>
+                  <div className="flex gap-1 mb-4 text-yellow-400">
+                    <Star size={18} weight="fill" />
+                    <Star size={18} weight="fill" />
+                    <Star size={18} weight="fill" />
+                    <Star size={18} weight="fill" />
+                    <Star size={18} weight="fill" />
+                  </div>
+                  <p className="text-[#545454] mb-6 italic text-sm leading-relaxed">&ldquo;{review.text}&rdquo;</p>
+                </div>
+
+                <div className="flex items-center gap-4 pt-4 border-t border-[#EBEBEB] mt-auto">
+                  <div className="w-12 h-12 rounded-full bg-[#D6D6D6] overflow-hidden flex items-center justify-center shrink-0 shadow-lg">
+                    {review.image ? (
+                      <img
+                        src={review.image}
+                        alt={review.name}
+                        loading="lazy"
+                        decoding="async"
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-[#9D9D9D] font-bold text-xl">{review.name.charAt(0)}</span>
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#141313] text-lg">{review.name}</p>
+                    <p className="text-xs text-[#545454] font-bold uppercase tracking-wide">{review.tag}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop marquee */}
+      <div className="hidden md:block">
+        {/* Gradient Masks */}
+        <div className="absolute top-0 left-0 w-24 md:w-40 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-24 md:w-40 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+
+        <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
+          {duplicatedReviews.map((review, idx) => (
+            <div key={idx} className="flex-none w-[340px] md:w-[400px] p-3">
+              <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#D6D6D6] hover:shadow-md transition-shadow h-full flex flex-col justify-between">
+                <div>
+                  <div className="flex gap-1 mb-4 text-yellow-400">
+                    <Star size={18} weight="fill" />
+                    <Star size={18} weight="fill" />
+                    <Star size={18} weight="fill" />
+                    <Star size={18} weight="fill" />
+                    <Star size={18} weight="fill" />
+                  </div>
+                  <p className="text-[#545454] mb-6 italic text-lg">&ldquo;{review.text}&rdquo;</p>
+                </div>
+
+                <div className="flex items-center gap-4 pt-4 border-t border-[#EBEBEB] mt-auto">
+                  <div className="w-12 h-12 rounded-full bg-[#D6D6D6] overflow-hidden flex items-center justify-center shrink-0 shadow-lg">
+                    {review.image ? (
+                      <img
+                        src={review.image}
+                        alt={review.name}
+                        loading="lazy"
+                        decoding="async"
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-[#9D9D9D] font-bold text-xl">{review.name.charAt(0)}</span>
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#141313] text-lg">{review.name}</p>
+                    <p className="text-xs text-[#545454] font-bold uppercase tracking-wide">{review.tag}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
