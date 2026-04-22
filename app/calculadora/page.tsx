@@ -217,7 +217,7 @@ const CalculadoraPage = () => {
     };
 
     return (
-        <div className="h-screen flex flex-col bg-[#EBEBEB] font-sans antialiased overflow-hidden">
+        <div className="h-screen flex flex-col bg-white font-sans antialiased overflow-hidden">
             {/* Compact Header */}
             <header className="bg-white border-b border-[#D6D6D6] flex-shrink-0">
                 <div className="container mx-auto px-4 md:px-6 py-2 md:py-3 flex justify-center">
@@ -275,7 +275,7 @@ const CalculadoraPage = () => {
 
                         {/* Step 1: Personal Information */}
                                 {currentStep === 1 && (
-                            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-[#D6D6D6] animate-fade-in flex-1 flex flex-col">
+                            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#D6D6D6] shadow-[0_20px_55px_rgba(20,19,19,0.08)] animate-fade-in flex-1 flex flex-col">
                                 <div className="text-center mb-4 md:mb-6">
                                     <div className="inline-flex items-center gap-2 bg-[#BFFF00]/15 text-[#141313] px-3 py-1.5 rounded-full text-xs font-bold mb-3">
                                         <Sparkle size={12} weight="fill" />
@@ -341,7 +341,7 @@ const CalculadoraPage = () => {
                                         </label>
                                         <div className="flex gap-2">
                                             <div className="relative w-[100px] flex-shrink-0">
-                                                <div className="w-full h-full flex items-center justify-center gap-2 rounded-xl border-2 border-[#D6D6D6] bg-[#EBEBEB] text-[#545454] font-medium text-base">
+                                                <div className="w-full h-full flex items-center justify-center gap-2 rounded-xl border-2 border-[#D6D6D6] bg-white text-[#545454] font-medium text-base">
                                                     <span>🇪🇸</span>
                                                     <span>+34</span>
                                                 </div>
@@ -379,7 +379,7 @@ const CalculadoraPage = () => {
 
                         {/* Step 2: Property Details */}
                         {currentStep === 2 && (
-                            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-[#D6D6D6] animate-fade-in flex-1 flex flex-col">
+                            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#D6D6D6] shadow-[0_20px_55px_rgba(20,19,19,0.08)] animate-fade-in flex-1 flex flex-col">
                                 <div className="text-center mb-4 flex-shrink-0">
                                     <div className="inline-flex items-center gap-2 bg-[#BFFF00]/15 text-[#141313] px-3 py-1.5 rounded-full text-xs font-bold mb-2">
                                         <Users size={12} weight="fill" />
@@ -511,7 +511,7 @@ const CalculadoraPage = () => {
 
                         {/* Step 3: Employment Details */}
                         {currentStep === 3 && (
-                            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-[#D6D6D6] animate-fade-in flex-1 flex flex-col">
+                            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#D6D6D6] shadow-[0_20px_55px_rgba(20,19,19,0.08)] animate-fade-in flex-1 flex flex-col">
                                 <div className="text-center mb-4 flex-shrink-0">
                                     <div className="inline-flex items-center gap-2 bg-[#BFFF00]/15 text-[#141313] px-3 py-1.5 rounded-full text-xs font-bold mb-2">
                                         <Users size={12} weight="fill" />
@@ -539,7 +539,7 @@ const CalculadoraPage = () => {
                                                     onClick={() => setFormData({ ...formData, salary: range })}
                                                     className={`px-4 py-3 rounded-xl font-bold transition-all border-2 text-sm md:text-base cursor-pointer ${formData.salary === range
                                                         ? 'bg-[#141313] text-white border-[#141313] shadow-lg transform scale-[1.02]'
-                                                        : 'bg-white text-[#545454] border-[#D6D6D6] hover:border-[#141313] hover:bg-[#EBEBEB]'
+                                                        : 'bg-white text-[#545454] border-[#D6D6D6] hover:border-[#141313] hover:bg-[#BFFF00]/10'
                                                         }`}
                                                 >
                                                     {range}
@@ -666,7 +666,7 @@ const CalculadoraPage = () => {
                                     </div>
 
                                     {/* Info */}
-                                    <div className="bg-[#EBEBEB] rounded-xl p-3 text-center">
+                                    <div className="bg-[#BFFF00]/10 border border-[#BFFF00]/40 rounded-xl p-3 text-center">
                                         <p className="text-[9px] text-[#9D9D9D] uppercase font-bold mb-0.5">Cesión</p>
                                         <p className="text-lg md:text-xl font-bold text-[#141313]">{months} meses</p>
                                     </div>
@@ -681,8 +681,8 @@ const CalculadoraPage = () => {
                                     onClick={prevStep}
                                     disabled={currentStep === 1 || isSubmitting}
                                     className={`px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 text-sm cursor-pointer ${currentStep === 1 || isSubmitting
-                                        ? 'bg-[#EBEBEB] text-[#9D9D9D] cursor-not-allowed'
-                                        : 'bg-white text-[#141313] hover:bg-[#EBEBEB] border-2 border-[#D6D6D6]'
+                                        ? 'bg-white text-[#9D9D9D] border-2 border-[#D6D6D6] cursor-not-allowed'
+                                        : 'bg-white text-[#141313] hover:bg-[#BFFF00]/10 border-2 border-[#D6D6D6]'
                                         }`}
                                 >
                                     <ArrowLeft size={16} weight="fill" />

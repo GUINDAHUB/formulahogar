@@ -161,7 +161,7 @@ function ViabilityFormContent() {
         <div className="mb-6 animate-fade-in-up">
             <label className="block text-sm font-bold text-[#141313] mb-2">{label}</label>
             <div className="flex items-center justify-center w-full group">
-                <label htmlFor={`file-${key}`} className={`relative flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ${selectedFiles[key] ? 'border-[#BFFF00] bg-[#BFFF00]/5' : 'border-[#D6D6D6] hover:border-[#141313] hover:bg-[#EBEBEB]'}`}>
+                <label htmlFor={`file-${key}`} className={`relative flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ${selectedFiles[key] ? 'border-[#BFFF00] bg-[#BFFF00]/5' : 'border-[#D6D6D6] hover:border-[#141313] hover:bg-[#BFFF00]/5'}`}>
                     <div className="flex flex-col items-center justify-center pt-5 pb-6 px-4">
                         {selectedFiles[key] ? (
                             <>
@@ -176,7 +176,7 @@ function ViabilityFormContent() {
                             </>
                         ) : (
                             <>
-                                <div className="p-3 bg-[#EBEBEB] rounded-full mb-3 group-hover:bg-[#D6D6D6] transition-colors">
+                                <div className="p-3 bg-[#BFFF00]/10 rounded-full mb-3 group-hover:bg-[#BFFF00]/20 transition-colors">
                                     <UploadSimple size={24} weight="fill" className="text-[#9D9D9D] group-hover:text-[#141313]" />
                                 </div>
                                 <p className="mb-2 text-sm text-[#9D9D9D] text-center"><span className="font-bold text-[#141313]">Haz clic para subir</span> o arrastra</p>
@@ -215,7 +215,7 @@ function ViabilityFormContent() {
 
     if (submissionStatus === 'success') {
         return (
-            <div className="min-h-screen bg-[#EBEBEB] flex flex-col font-sans">
+            <div className="min-h-screen bg-white flex flex-col font-sans">
                 <PageHeader />
                 <div className="flex-1 flex items-center justify-center px-4 py-12">
                     <div className="bg-white p-10 rounded-3xl shadow-xl max-w-md w-full text-center border border-[#D6D6D6]">
@@ -238,7 +238,7 @@ function ViabilityFormContent() {
 
     if (submissionStatus === 'already_submitted') {
         return (
-            <div className="min-h-screen bg-[#EBEBEB] flex flex-col font-sans">
+            <div className="min-h-screen bg-white flex flex-col font-sans">
                 <PageHeader />
                 <div className="flex-1 flex items-center justify-center px-4 py-12">
                     <div className="bg-white p-10 rounded-3xl shadow-xl max-w-md w-full text-center border border-[#D6D6D6]">
@@ -263,7 +263,7 @@ function ViabilityFormContent() {
 
     if (submissionStatus === 'task_not_found') {
         return (
-            <div className="min-h-screen bg-[#EBEBEB] flex flex-col font-sans">
+            <div className="min-h-screen bg-white flex flex-col font-sans">
                 <PageHeader />
                 <div className="flex-1 flex items-center justify-center px-4 py-12">
                     <div className="bg-white p-10 rounded-3xl shadow-xl max-w-md w-full text-center border border-[#D6D6D6]">
@@ -274,7 +274,7 @@ function ViabilityFormContent() {
                         <p className="text-[#545454] mb-8 leading-relaxed">No se ha creado aún tu perfil en nuestro sistema. Por favor, asegúrate de haber introducido el teléfono correctamente o realiza el estudio previo.</p>
                         <button
                             onClick={() => setSubmissionStatus('idle')}
-                            className="w-full bg-[#EBEBEB] text-[#141313] font-bold py-4 px-6 rounded-xl hover:bg-[#D6D6D6] transition-colors mb-3 cursor-pointer"
+                            className="w-full bg-white border border-[#D6D6D6] text-[#141313] font-bold py-4 px-6 rounded-xl hover:bg-[#BFFF00]/10 transition-colors mb-3 cursor-pointer"
                         >
                             Intentar de nuevo
                         </button>
@@ -291,14 +291,14 @@ function ViabilityFormContent() {
     }
 
     return (
-        <div className="min-h-screen bg-[#EBEBEB] font-sans antialiased flex flex-col">
+        <div className="min-h-screen bg-white font-sans antialiased flex flex-col">
             <PageHeader />
 
             <div className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-2xl">
-                <div className="bg-white rounded-2xl shadow-xl border border-[#D6D6D6] overflow-hidden animate-fade-in-up">
+                <div className="bg-white rounded-2xl shadow-[0_20px_55px_rgba(20,19,19,0.08)] border border-[#D6D6D6] overflow-hidden animate-fade-in-up">
 
                     {/* Form Header */}
-                    <div className="bg-[#EBEBEB] p-8 md:p-10 border-b border-[#D6D6D6] text-center">
+                    <div className="bg-white p-8 md:p-10 border-b border-[#D6D6D6] text-center">
                         <h1 className="font-display text-2xl md:text-3xl font-bold text-[#141313] mb-2">Estudio de Viabilidad</h1>
                         <p className="text-sm text-[#545454] max-w-lg mx-auto leading-relaxed">Sube la documentación necesaria para que nuestro equipo financiero analice tu caso sin compromiso.</p>
                     </div>
@@ -312,7 +312,7 @@ function ViabilityFormContent() {
                             </label>
                             <div className="flex gap-2">
                                 <div className="relative w-[100px] flex-shrink-0">
-                                    <div className="w-full h-full flex items-center justify-center gap-2 rounded-xl border-2 border-[#D6D6D6] bg-[#EBEBEB] text-[#545454] font-medium text-base py-3">
+                                    <div className="w-full h-full flex items-center justify-center gap-2 rounded-xl border-2 border-[#D6D6D6] bg-white text-[#545454] font-medium text-base py-3">
                                         <span>🇪🇸</span>
                                         <span>+34</span>
                                     </div>
@@ -345,7 +345,7 @@ function ViabilityFormContent() {
                         <div>
                             <label className="block text-sm font-bold text-[#141313] mb-3">Situación Laboral</label>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${employmentStatus === 'autonomo' ? 'border-[#BFFF00] bg-[#BFFF00]/5 shadow-sm' : 'border-[#D6D6D6] hover:border-[#141313]/50 hover:bg-[#EBEBEB]'}`}>
+                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${employmentStatus === 'autonomo' ? 'border-[#BFFF00] bg-[#BFFF00]/5 shadow-sm' : 'border-[#D6D6D6] hover:border-[#141313]/50 hover:bg-[#BFFF00]/10'}`}>
                                     <input {...register('employmentStatus', { required: true })} type="radio" value="autonomo" className="sr-only" />
                                     <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${employmentStatus === 'autonomo' ? 'border-[#BFFF00]' : 'border-[#D6D6D6]'}`}>
                                         {employmentStatus === 'autonomo' && <div className="w-3 h-3 rounded-full bg-[#BFFF00]" />}
@@ -353,7 +353,7 @@ function ViabilityFormContent() {
                                     <span className={`font-bold ${employmentStatus === 'autonomo' ? 'text-[#141313]' : 'text-[#545454]'}`}>Soy Autónomo</span>
                                 </label>
 
-                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${employmentStatus === 'cuenta_ajena' ? 'border-[#BFFF00] bg-[#BFFF00]/5 shadow-sm' : 'border-[#D6D6D6] hover:border-[#141313]/50 hover:bg-[#EBEBEB]'}`}>
+                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${employmentStatus === 'cuenta_ajena' ? 'border-[#BFFF00] bg-[#BFFF00]/5 shadow-sm' : 'border-[#D6D6D6] hover:border-[#141313]/50 hover:bg-[#BFFF00]/10'}`}>
                                     <input {...register('employmentStatus', { required: true })} type="radio" value="cuenta_ajena" className="sr-only" />
                                     <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${employmentStatus === 'cuenta_ajena' ? 'border-[#BFFF00]' : 'border-[#D6D6D6]'}`}>
                                         {employmentStatus === 'cuenta_ajena' && <div className="w-3 h-3 rounded-full bg-[#BFFF00]" />}
@@ -368,7 +368,7 @@ function ViabilityFormContent() {
                         <div>
                             <label className="block text-sm font-bold text-[#141313] mb-3">¿Compras solo o acompañado?</label>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${purchaseType === 'solo' ? 'border-[#BFFF00] bg-[#BFFF00]/5 shadow-sm' : 'border-[#D6D6D6] hover:border-[#141313]/50 hover:bg-[#EBEBEB]'}`}>
+                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${purchaseType === 'solo' ? 'border-[#BFFF00] bg-[#BFFF00]/5 shadow-sm' : 'border-[#D6D6D6] hover:border-[#141313]/50 hover:bg-[#BFFF00]/10'}`}>
                                     <input {...register('purchaseType', { required: true })} type="radio" value="solo" className="sr-only" />
                                     <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${purchaseType === 'solo' ? 'border-[#BFFF00]' : 'border-[#D6D6D6]'}`}>
                                         {purchaseType === 'solo' && <div className="w-3 h-3 rounded-full bg-[#BFFF00]" />}
@@ -376,7 +376,7 @@ function ViabilityFormContent() {
                                     <span className={`font-bold ${purchaseType === 'solo' ? 'text-[#141313]' : 'text-[#545454]'}`}>Compro Solo</span>
                                 </label>
 
-                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${purchaseType === 'acompanado' ? 'border-[#BFFF00] bg-[#BFFF00]/5 shadow-sm' : 'border-[#D6D6D6] hover:border-[#141313]/50 hover:bg-[#EBEBEB]'}`}>
+                                <label className={`cursor-pointer relative p-5 rounded-xl border-2 transition-all duration-300 flex items-center gap-4 ${purchaseType === 'acompanado' ? 'border-[#BFFF00] bg-[#BFFF00]/5 shadow-sm' : 'border-[#D6D6D6] hover:border-[#141313]/50 hover:bg-[#BFFF00]/10'}`}>
                                     <input {...register('purchaseType', { required: true })} type="radio" value="acompanado" className="sr-only" />
                                     <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${purchaseType === 'acompanado' ? 'border-[#BFFF00]' : 'border-[#D6D6D6]'}`}>
                                         {purchaseType === 'acompanado' && <div className="w-3 h-3 rounded-full bg-[#BFFF00]" />}
@@ -527,7 +527,7 @@ function ViabilityFormContent() {
                     </form>
 
                     {/* Security Note */}
-                    <div className="bg-[#EBEBEB] py-6 px-8 text-center border-t border-[#D6D6D6]">
+                    <div className="bg-white py-6 px-8 text-center border-t border-[#D6D6D6]">
                         <p className="text-xs text-[#9D9D9D] flex items-center justify-center gap-2">
                             <CheckCircle size={12} weight="fill" />
                             Tus datos están protegidos y encriptados. Solo serán utilizados para el estudio de viabilidad.
