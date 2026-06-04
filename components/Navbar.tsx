@@ -80,17 +80,19 @@ const Navbar = () => {
     sendGTMEvent({ event: 'buttonClicked', value: event });
   };
 
+  // La home (/) es ahora la landing de Alquiler con Opción a Compra.
+  // La de Cesión de Uso vive en /cesion-de-uso.
   const navItems =
-    pathname === '/alquiler-opcion-compra'
+    pathname === '/cesion-de-uso'
       ? [
-          { label: 'Cómo funciona', id: 'como-funciona' },
-          { label: 'Ventajas', id: 'ventajas' },
-          { label: 'Reseñas', id: 'reseñas' },
-        ]
-      : [
           { label: 'Cómo funciona', id: 'cómo-funciona' },
           { label: 'Ventajas', id: 'ventajas' },
           { label: 'FAQ', id: 'faq' },
+        ]
+      : [
+          { label: 'Cómo funciona', id: 'como-funciona' },
+          { label: 'Ventajas', id: 'ventajas' },
+          { label: 'Reseñas', id: 'reseñas' },
         ];
 
   return (
@@ -159,35 +161,12 @@ const Navbar = () => {
                       )}
                     >
                       <div className="text-sm font-bold text-[#141313]">
-                        Cesión de Uso
-                      </div>
-                      <div
-                        className={cn(
-                          'text-xs mt-0.5',
-                          isActivePath('/') ? 'text-[#545454]' : 'text-[#9D9D9D]',
-                        )}
-                      >
-                        Compra ya, paga después
-                      </div>
-                    </Link>
-                    <Link
-                      href="/alquiler-opcion-compra"
-                      className={cn(
-                        'block px-4 py-3 rounded-lg transition-colors group/item',
-                        isActivePath('/alquiler-opcion-compra')
-                          ? 'bg-[#BFFF00]'
-                          : 'hover:bg-[#EBEBEB]',
-                      )}
-                    >
-                      <div className="text-sm font-bold text-[#141313]">
                         Alquiler con Opción a Compra
                       </div>
                       <div
                         className={cn(
                           'text-xs mt-0.5',
-                          isActivePath('/alquiler-opcion-compra')
-                            ? 'text-[#545454]'
-                            : 'text-[#9D9D9D]',
+                          isActivePath('/') ? 'text-[#545454]' : 'text-[#9D9D9D]',
                         )}
                       >
                         Tu entrada, mes a mes
@@ -268,18 +247,6 @@ const Navbar = () => {
                     className={cn(
                       'text-base font-semibold px-3 py-2.5 rounded-xl transition-colors',
                       isActivePath('/')
-                        ? 'bg-[#BFFF00] text-[#141313]'
-                        : 'text-[#545454] hover:text-[#141313] hover:bg-[#EBEBEB]',
-                    )}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Cesión de Uso
-                  </Link>
-                  <Link
-                    href="/alquiler-opcion-compra"
-                    className={cn(
-                      'text-base font-semibold px-3 py-2.5 rounded-xl transition-colors',
-                      isActivePath('/alquiler-opcion-compra')
                         ? 'bg-[#BFFF00] text-[#141313]'
                         : 'text-[#545454] hover:text-[#141313] hover:bg-[#EBEBEB]',
                     )}

@@ -53,9 +53,12 @@ body {
   font-family: 'Manrope', Arial, sans-serif;
 }
 
-/* Display font utility */
+/* Display font utility — Libre Baskerville
+   Brand defaults: tracking -0.03em + line-height 1.12 (todas las medidas) */
 .font-display {
   font-family: 'Libre Baskerville', Georgia, serif;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

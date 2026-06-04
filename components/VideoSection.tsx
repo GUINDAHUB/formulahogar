@@ -52,7 +52,7 @@ const VideoSection = ({
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <p className="text-xs font-bold uppercase tracking-widest text-[#9D9D9D] mb-4">Descubre el proceso</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-[#141313] mb-6 tracking-tight">
+          <h2 className="font-display text-3xl md:text-5xl font-bold text-[#141313] mb-6">
             Así funciona tu camino <br className="hidden sm:block" />
             hacia la <span className="underline decoration-[#BFFF00] decoration-[5px] underline-offset-4">propiedad real</span>
           </h2>
