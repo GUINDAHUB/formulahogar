@@ -5,9 +5,9 @@ import Redirect from "./redirect";
 const BELENDER_URL =
   "https://widget.belender.net/widget-boxed/clavepin/6d17c1b9-3ec4-431d-b009-be7742eff16c/e75aa965-4851-4cb9-b2d1-00b49d3b7950";
 
-const TITLE = "Fórmula Hogar — Sube tu documentación";
+const TITLE = "Fórmula Hogar — Autoriza el acceso a tu documentación";
 const DESCRIPTION =
-  "Envía tu documentación de forma segura y da el siguiente paso hacia tu primera vivienda con Fórmula Hogar.";
+  "Da tu consentimiento de forma segura y protegida. Tus datos están a salvo y solo tú decides cuándo avanzar con tu solicitud.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://formulahogar.com"),
@@ -62,11 +62,11 @@ export default function DocumentacionPage() {
 
       <div className="max-w-sm">
         <p className="font-display text-xl text-near-black">
-          Te llevamos a tu documentación…
+          Autoriza el acceso de forma segura
         </p>
         <p className="mt-2 text-sm text-brand-gray-600">
-          Un momento, estamos abriendo tu espacio seguro para subir los
-          documentos.
+          Te llevamos a un entorno seguro y protegido para que confirmes el
+          acceso a tu documentación. Solo será un momento.
         </p>
       </div>
 
@@ -75,7 +75,7 @@ export default function DocumentacionPage() {
           href={BELENDER_URL}
           className="rounded-lg bg-brand px-6 py-3 font-semibold text-near-black"
         >
-          Continuar a mi documentación
+          Continuar de forma segura
         </a>
       </noscript>
     </main>
