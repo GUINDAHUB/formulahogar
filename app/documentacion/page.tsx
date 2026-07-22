@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Redirect from "./redirect";
+import CertificationBadge from "@/components/CertificationBadge";
 
 const BELENDER_URL =
   "https://widget.belender.net/widget-boxed/clavepin/6d17c1b9-3ec4-431d-b009-be7742eff16c/e75aa965-4851-4cb9-b2d1-00b49d3b7950";
@@ -69,6 +70,8 @@ export default function DocumentacionPage() {
           acceso a tu documentación. Solo será un momento.
         </p>
       </div>
+
+      <CertificationBadge />
 
       <noscript>
         <a

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { ArrowRightIcon } from "@phosphor-icons/react";
+import CertificationBadge from "@/components/CertificationBadge";
 import { track } from "@/lib/analytics";
 
 // TODO: cambia /hero-house.png por una foto editorial específica de la
@@ -51,6 +52,10 @@ export default function Hero() {
             Quiero mi análisis gratis
             <ArrowRightIcon size={18} weight="bold" />
           </button>
+
+          <div className="mt-8">
+            <CertificationBadge framed />
+          </div>
         </div>
       </div>
     </section>

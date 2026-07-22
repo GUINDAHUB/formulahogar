@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import React from 'react';
+import CertificationBadge from '@/components/CertificationBadge';
 
 // --- Types ---
 type EmploymentStatus = 'autonomo' | 'cuenta_ajena';
@@ -528,6 +529,9 @@ function ViabilityFormContent() {
 
                     {/* Security Note */}
                     <div className="bg-white py-6 px-8 text-center border-t border-[#D6D6D6]">
+                        <div className="mb-4 flex justify-center">
+                            <CertificationBadge />
+                        </div>
                         <p className="text-xs text-[#9D9D9D] flex items-center justify-center gap-2">
                             <CheckCircle size={12} weight="fill" />
                             Tus datos están protegidos y encriptados. Solo serán utilizados para el estudio de viabilidad.

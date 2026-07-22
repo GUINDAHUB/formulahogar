@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import CertificationBadge from "@/components/CertificationBadge";
 
 export default function CampaignFooter() {
   const scrollToTop = (e: React.MouseEvent) => {
@@ -57,6 +58,10 @@ export default function CampaignFooter() {
           </nav>
 
           <p className="text-xs text-[#9D9D9D]">© {new Date().getFullYear()} FórmulaHogar</p>
+        </div>
+
+        <div className="mt-8 flex justify-center border-t border-[#EBEBEB] pt-8">
+          <CertificationBadge />
         </div>
       </div>
     </footer>

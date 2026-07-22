@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft } from '@phosphor-icons/react/dist/ssr';
+import CertificationBadge from '@/components/CertificationBadge';
 
 const PoliticasPage = () => {
   return (
@@ -119,6 +120,10 @@ const PoliticasPage = () => {
                         </p>
                     </div>
                 </section>
+            </div>
+
+            <div className="mt-16 flex justify-center border-t border-[#D6D6D6] pt-10">
+                <CertificationBadge />
             </div>
         </div>
     </div>

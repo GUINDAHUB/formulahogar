@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { House, CheckCircle, TrendUp, Calendar, Wallet } from '@phosphor-icons/react';
 import { calculateResults } from '@/utils/calculator';
+import CertificationBadge from '@/components/CertificationBadge';
 
 const AnimatedNumber = ({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) => {
     const [displayValue, setDisplayValue] = useState(0);
@@ -226,6 +227,11 @@ const ResultsContent = () => {
                     </div>
                 </div>
             </main>
+
+            {/* Certification strip */}
+            <div className="bg-white border-t border-[#D6D6D6] flex-shrink-0 py-2.5 flex justify-center">
+                <CertificationBadge />
+            </div>
 
             <style jsx>{`
                 @keyframes fade-in {

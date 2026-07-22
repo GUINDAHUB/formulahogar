@@ -13,6 +13,7 @@ import {
 import Navbar from '@/components/Navbar';
 import GrainOverlay from '@/components/GrainOverlay';
 import Footer from '@/components/Footer';
+import CertificationBadge from '@/components/CertificationBadge';
 import { sendGTMEvent } from '@next/third-parties/google'
 
 const VideoSection = dynamic(() => import('@/components/VideoSection'), {
@@ -112,6 +113,10 @@ const LandingPage = () => {
                 </div>
               </div>
               <p>Más de <span className="font-bold text-[#141313]">500+</span> propietarios felices</p>
+            </div>
+
+            <div className="mt-6 sm:mt-7">
+              <CertificationBadge framed />
             </div>
           </div>
         </div>

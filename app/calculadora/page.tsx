@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { sendGTMEvent } from '@next/third-parties/google';
 import { calculateResults } from '@/utils/calculator';
+import CertificationBadge from '@/components/CertificationBadge';
 
 // Autonomous communities in Spain
 const COMUNIDADES = [
@@ -725,6 +726,11 @@ const CalculadoraPage = () => {
                     </div>
                 </div>
             </main>
+
+            {/* Certification strip */}
+            <div className="bg-white border-t border-[#D6D6D6] flex-shrink-0 py-2.5 flex justify-center">
+                <CertificationBadge />
+            </div>
 
             {/* Custom styles */}
             <style jsx>{`

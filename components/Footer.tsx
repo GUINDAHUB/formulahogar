@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import CertificationBadge from './CertificationBadge';
 
 const Footer = () => {
     return (
@@ -22,8 +23,11 @@ const Footer = () => {
                         <a href="#" className="hover:text-white transition-colors">Cookies</a>
                     </div>
                 </div>
-                <div className="text-center md:text-left text-xs opacity-60">
-                    © {new Date().getFullYear()} Fórmula Hogar. Todos los derechos reservados. Una revolución en el sector PropTech.
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-t border-white/10 pt-8">
+                    <CertificationBadge variant="dark" />
+                    <div className="text-center md:text-right text-xs opacity-60">
+                        © {new Date().getFullYear()} Fórmula Hogar. Todos los derechos reservados. Una revolución en el sector PropTech.
+                    </div>
                 </div>
             </div>
         </footer>
