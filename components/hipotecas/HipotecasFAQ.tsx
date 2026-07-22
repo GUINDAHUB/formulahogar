@@ -53,7 +53,7 @@ export default function HipotecasFAQ() {
   };
 
   return (
-    <section className="bg-white py-20 md:py-28 border-t border-[#EBEBEB]">
+    <section id="faq" className="bg-white py-20 md:py-28 border-t border-[#EBEBEB]">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-3xl">
           <h2 className="font-display text-center text-3xl text-[#141313] md:text-5xl">

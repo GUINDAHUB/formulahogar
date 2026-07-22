@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import CampaignHeader from "@/components/hipotecas/CampaignHeader";
+import Navbar from "@/components/Navbar";
 import CampaignFooter from "@/components/hipotecas/CampaignFooter";
 import Hero from "@/components/hipotecas/Hero";
 import HowItWorks from "@/components/hipotecas/HowItWorks";
@@ -24,7 +24,7 @@ export default function HipotecasPage() {
 
   return (
     <main className="bg-white text-[#141313]">
-      <CampaignHeader />
+      <Navbar />
       <Hero />
       <HowItWorks />
       <BankLogosGrid />

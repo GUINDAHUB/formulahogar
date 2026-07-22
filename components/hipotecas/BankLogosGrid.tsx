@@ -31,7 +31,7 @@ export default function BankLogosGrid() {
   const loop = [...BANKS, ...BANKS];
 
   return (
-    <section className="bg-white py-20 md:py-28">
+    <section id="bancos" className="bg-white py-20 md:py-28">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-wider text-[#545454]">

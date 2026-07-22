@@ -81,7 +81,8 @@ const Navbar = () => {
   };
 
   // La home (/) es ahora la landing de Alquiler con Opción a Compra.
-  // La de Cesión de Uso vive en /cesion-de-uso.
+  // La de Cesión de Uso vive en /cesion-de-uso y la de Hipotecas en /hipotecas.
+  const isHipotecas = pathname === '/hipotecas';
   const navItems =
     pathname === '/cesion-de-uso'
       ? [
@@ -89,11 +90,17 @@ const Navbar = () => {
           { label: 'Ventajas', id: 'ventajas' },
           { label: 'FAQ', id: 'faq' },
         ]
-      : [
-          { label: 'Cómo funciona', id: 'como-funciona' },
-          { label: 'Ventajas', id: 'ventajas' },
-          { label: 'Reseñas', id: 'reseñas' },
-        ];
+      : isHipotecas
+        ? [
+            { label: 'Cómo funciona', id: 'como-funciona' },
+            { label: 'Bancos', id: 'bancos' },
+            { label: 'FAQ', id: 'faq' },
+          ]
+        : [
+            { label: 'Cómo funciona', id: 'como-funciona' },
+            { label: 'Ventajas', id: 'ventajas' },
+            { label: 'Reseñas', id: 'reseñas' },
+          ];
 
   return (
     <>
@@ -172,6 +179,29 @@ const Navbar = () => {
                         Tu entrada, mes a mes
                       </div>
                     </Link>
+                    <Link
+                      href="/hipotecas"
+                      className={cn(
+                        'block px-4 py-3 rounded-lg transition-colors group/item',
+                        isActivePath('/hipotecas')
+                          ? 'bg-[#BFFF00]'
+                          : 'hover:bg-[#EBEBEB]',
+                      )}
+                    >
+                      <div className="text-sm font-bold text-[#141313]">
+                        Hipotecas
+                      </div>
+                      <div
+                        className={cn(
+                          'text-xs mt-0.5',
+                          isActivePath('/hipotecas')
+                            ? 'text-[#545454]'
+                            : 'text-[#9D9D9D]',
+                        )}
+                      >
+                        Negociamos por ti, sin coste
+                      </div>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -192,12 +222,23 @@ const Navbar = () => {
                   {item.label}
                 </button>
               ))}
-              <a
-                href="/calculadora"
-                className="px-5 py-2 rounded-lg font-bold text-sm transition-all transform hover:scale-105 bg-[#BFFF00] text-[#141313] cursor-pointer"
-              >
-                Comenzar
-              </a>
+              {isHipotecas ? (
+                <button
+                  onClick={() =>
+                    scrollToSection('lead-form', 'cta-navbar-hipotecas')
+                  }
+                  className="px-5 py-2 rounded-lg font-bold text-sm transition-all transform hover:scale-105 bg-[#BFFF00] text-[#141313] cursor-pointer"
+                >
+                  Análisis gratis
+                </button>
+              ) : (
+                <a
+                  href="/calculadora"
+                  className="px-5 py-2 rounded-lg font-bold text-sm transition-all transform hover:scale-105 bg-[#BFFF00] text-[#141313] cursor-pointer"
+                >
+                  Comenzar
+                </a>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -254,6 +295,18 @@ const Navbar = () => {
                   >
                     Alquiler con Opción a Compra
                   </Link>
+                  <Link
+                    href="/hipotecas"
+                    className={cn(
+                      'text-base font-semibold px-3 py-2.5 rounded-xl transition-colors',
+                      isActivePath('/hipotecas')
+                        ? 'bg-[#BFFF00] text-[#141313]'
+                        : 'text-[#545454] hover:text-[#141313] hover:bg-[#EBEBEB]',
+                    )}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Hipotecas
+                  </Link>
                 </div>
 
                 {navItems.map((item) => (
@@ -273,17 +326,28 @@ const Navbar = () => {
                     {item.label}
                   </button>
                 ))}
-                <a
-                  href="/calculadora"
-                  className={cn(
-                    'w-full text-center py-3 rounded-xl font-bold mt-1 transition-all',
-                    isActivePath('/calculadora')
-                      ? 'bg-[#141313] text-white'
-                      : 'bg-[#BFFF00] text-[#141313]',
-                  )}
-                >
-                  Quiero mi casa
-                </a>
+                {isHipotecas ? (
+                  <button
+                    onClick={() =>
+                      scrollToSection('lead-form', 'cta-navbar-hipotecas')
+                    }
+                    className="w-full text-center py-3 rounded-xl font-bold mt-1 transition-all bg-[#BFFF00] text-[#141313] cursor-pointer"
+                  >
+                    Quiero mi análisis
+                  </button>
+                ) : (
+                  <a
+                    href="/calculadora"
+                    className={cn(
+                      'w-full text-center py-3 rounded-xl font-bold mt-1 transition-all',
+                      isActivePath('/calculadora')
+                        ? 'bg-[#141313] text-white'
+                        : 'bg-[#BFFF00] text-[#141313]',
+                    )}
+                  >
+                    Quiero mi casa
+                  </a>
+                )}
               </div>
             </motion.div>
           </>
