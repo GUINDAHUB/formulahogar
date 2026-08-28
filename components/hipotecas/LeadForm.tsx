@@ -363,7 +363,7 @@ export default function LeadForm() {
               </PrimaryButton>
             </div>
             <p className="text-xs text-[#9D9D9D] text-center">
-              Sin compromiso · Sin coste · Sin spam
+              Sin compromiso · Precio fijo · Sin spam
             </p>
           </>
         )}

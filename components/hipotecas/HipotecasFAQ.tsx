@@ -13,7 +13,7 @@ interface FaqItem {
 const FAQS: FaqItem[] = [
   {
     q: "¿Cuánto cuesta vuestro servicio?",
-    a: "Cero euros. Nuestros honorarios los paga la entidad con la que firmes, y solo si firmas. Si no encontramos una oferta que te convenza, no pagas nada. Sin permanencias, sin cuotas de estudio.",
+    a: "Un precio fijo que conoces desde el principio, sea cual sea el precio de la vivienda. Nada de porcentajes ni variables. Y solo si firmas: si no encontramos una oferta que te convenza, no pagas nada. Sin permanencias, sin cuotas de estudio.",
   },
   {
     q: "¿En cuánto tiempo tengo una respuesta?",
