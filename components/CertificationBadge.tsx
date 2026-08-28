@@ -47,7 +47,7 @@ const CertificationBadge = ({
                 <br />
                 de Crédito Inmobiliario{' '}
                 <span className={`font-bold ${isDark ? 'text-white' : 'text-[#141313]'}`}>
-                    D783
+                    E783
                 </span>
             </p>
         </div>
