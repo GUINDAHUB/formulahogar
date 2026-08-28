@@ -80,9 +80,10 @@ const Navbar = () => {
     sendGTMEvent({ event: 'buttonClicked', value: event });
   };
 
-  // La home (/) es ahora la landing de Alquiler con Opción a Compra.
-  // La de Cesión de Uso vive en /cesion-de-uso y la de Hipotecas en /hipotecas.
-  const isHipotecas = pathname === '/hipotecas';
+  // La home (/) es ahora la landing de Hipotecas.
+  // Alquiler con Opción a Compra vive en /alquiler-opcion-compra y
+  // Cesión de Uso en /cesion-de-uso.
+  const isHipotecas = pathname === '/';
   const navItems =
     pathname === '/cesion-de-uso'
       ? [
@@ -90,16 +91,16 @@ const Navbar = () => {
           { label: 'Ventajas', id: 'ventajas' },
           { label: 'FAQ', id: 'faq' },
         ]
-      : isHipotecas
+      : pathname === '/alquiler-opcion-compra'
         ? [
-            { label: 'Cómo funciona', id: 'como-funciona' },
-            { label: 'Bancos', id: 'bancos' },
-            { label: 'FAQ', id: 'faq' },
-          ]
-        : [
             { label: 'Cómo funciona', id: 'como-funciona' },
             { label: 'Ventajas', id: 'ventajas' },
             { label: 'Reseñas', id: 'reseñas' },
+          ]
+        : [
+            { label: 'Cómo funciona', id: 'como-funciona' },
+            { label: 'Bancos', id: 'bancos' },
+            { label: 'FAQ', id: 'faq' },
           ];
 
   return (
@@ -168,7 +169,7 @@ const Navbar = () => {
                       )}
                     >
                       <div className="text-sm font-bold text-[#141313]">
-                        Alquiler con Opción a Compra
+                        Hipotecas
                       </div>
                       <div
                         className={cn(
@@ -176,30 +177,30 @@ const Navbar = () => {
                           isActivePath('/') ? 'text-[#545454]' : 'text-[#9D9D9D]',
                         )}
                       >
-                        Tu entrada, mes a mes
+                        Negociamos por ti, a precio fijo
                       </div>
                     </Link>
                     <Link
-                      href="/hipotecas"
+                      href="/alquiler-opcion-compra"
                       className={cn(
                         'block px-4 py-3 rounded-lg transition-colors group/item',
-                        isActivePath('/hipotecas')
+                        isActivePath('/alquiler-opcion-compra')
                           ? 'bg-[#BFFF00]'
                           : 'hover:bg-[#EBEBEB]',
                       )}
                     >
                       <div className="text-sm font-bold text-[#141313]">
-                        Hipotecas
+                        Alquiler con Opción a Compra
                       </div>
                       <div
                         className={cn(
                           'text-xs mt-0.5',
-                          isActivePath('/hipotecas')
+                          isActivePath('/alquiler-opcion-compra')
                             ? 'text-[#545454]'
                             : 'text-[#9D9D9D]',
                         )}
                       >
-                        Negociamos por ti, sin coste
+                        Tu entrada, mes a mes
                       </div>
                     </Link>
                   </div>
@@ -293,19 +294,19 @@ const Navbar = () => {
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Alquiler con Opción a Compra
+                    Hipotecas
                   </Link>
                   <Link
-                    href="/hipotecas"
+                    href="/alquiler-opcion-compra"
                     className={cn(
                       'text-base font-semibold px-3 py-2.5 rounded-xl transition-colors',
-                      isActivePath('/hipotecas')
+                      isActivePath('/alquiler-opcion-compra')
                         ? 'bg-[#BFFF00] text-[#141313]'
                         : 'text-[#545454] hover:text-[#141313] hover:bg-[#EBEBEB]',
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Hipotecas
+                    Alquiler con Opción a Compra
                   </Link>
                 </div>
 

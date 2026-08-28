@@ -3,8 +3,21 @@ import "./globals.css";
 import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
-  title: "FórmulaHogar — Tu propio hogar, es posible",
-  description: "Conviértete en propietario con solo un 5% de entrada. Fórmula Hogar hace realidad tu primera vivienda sin la barrera del 30%.",
+  title: "FórmulaHogar — Tu hipoteca, en las mejores manos",
+  description: "Negociamos con más de 20 bancos para conseguirte la mejor hipoteca del mercado. Precio fijo, sin sorpresas. Análisis gratuito en 48h.",
+  openGraph: {
+    title: "FórmulaHogar — Tu hipoteca, en las mejores manos",
+    description: "Tu mejor hipoteca, negociada por nosotros. Precio fijo, sin sorpresas. Respuesta en 48h.",
+    url: "https://formulahogar.com/",
+    siteName: "FórmulaHogar",
+    locale: "es_ES",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FórmulaHogar — Tu hipoteca, en las mejores manos",
+    description: "Tu mejor hipoteca, negociada por nosotros. Precio fijo, sin sorpresas. Respuesta en 48h.",
+  },
   icons: {
     icon: [
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
