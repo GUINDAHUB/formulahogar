@@ -15,8 +15,11 @@ interface Bank {
 const BANKS: Bank[] = [
   { name: "Santander", svg: "/logos/banks/santander.svg" },
   { name: "Sabadell", svg: "/logos/banks/sabadell.svg" },
-  { name: "Bankinter", svg: "/logos/banks/bankinter.svg" },
+  // Bankinter oculto de momento — el SVG sigue en /public/logos/banks por si vuelve.
+  // { name: "Bankinter", svg: "/logos/banks/bankinter.svg" },
+  { name: "Abanca", svg: "/logos/banks/abanca.svg" },
   { name: "Caja Rural", svg: "/logos/banks/caja_rural_del_sur.svg" },
+  { name: "Deutsche Bank", svg: "/logos/banks/deutsche_bank.svg" },
   { name: "Banco de España", svg: "/logos/banks/banco_de_espana.png" }
 ];
 
