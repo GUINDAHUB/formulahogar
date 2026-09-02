@@ -41,6 +41,21 @@ const FAQS: FaqItem[] = [
   },
 ];
 
+// Datos estructurados FAQPage (AEO): mismas preguntas y respuestas que se
+// renderizan abajo, para snippets destacados y motores generativos.
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.a,
+    },
+  })),
+};
+
 export default function HipotecasFAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -54,6 +69,10 @@ export default function HipotecasFAQ() {
 
   return (
     <section id="faq" className="bg-white py-20 md:py-28 border-t border-[#EBEBEB]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-3xl">
           <h2 className="font-display text-center text-3xl text-[#141313] md:text-5xl">

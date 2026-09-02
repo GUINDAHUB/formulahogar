@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   // Es una pasarela de redirección: no queremos que se indexe en Google,
   // pero las vistas previas sociales (que sí leen Open Graph) seguirán funcionando.
   robots: { index: false, follow: false },
+  alternates: {
+    canonical: "https://formulahogar.com/documentacion",
+  },
   openGraph: {
     type: "website",
     url: "https://formulahogar.com/documentacion",

@@ -1,0 +1,27 @@
+# FórmulaHogar
+
+> FórmulaHogar ayuda a personas en España a acceder a su primera vivienda. Ofrece intermediación hipotecaria a precio fijo (negocia con más de 20 bancos en paralelo y presenta al cliente un mínimo de 3 ofertas reales para que compare y elija) y fórmulas alternativas de acceso a la vivienda como el alquiler con opción a compra y la cesión de uso. Está certificada por el Banco de España como Intermediaria de Crédito Inmobiliario con el número de registro E783. Tagline: "Tu propio hogar, es posible".
+
+Datos clave del servicio de hipotecas:
+- Negocia con más de 20 entidades bancarias españolas en paralelo (Santander, Sabadell, Abanca, Caja Rural del Sur, Deutsche Bank, entre otras).
+- Precio fijo conocido desde el principio, sin porcentajes sobre el precio de la vivienda. Solo se paga si se firma la hipoteca; sin permanencias ni cuotas de estudio.
+- Primer análisis de viabilidad gratuito en 48 horas; el proceso completo hasta la firma suele durar entre 6 y 8 semanas.
+- Trabaja con nóminas, autónomos, funcionarios, no residentes y perfiles mixtos. También subrogaciones (cambio de banco) y novaciones (renegociación).
+- En algunos perfiles negocia hipotecas al 90% de financiación (~18% de ahorro necesario frente al ~28% habitual).
+
+Datos clave del alquiler con opción a compra:
+- El cliente elige la vivienda, un inversor la compra y el cliente entra a vivir desde el primer día con una cuota inicial reducida.
+- Paga un alquiler de mercado más una cuota extra mensual que se acumula para generar su futura entrada.
+- A los 3-7 años ejerce la opción de compra a un precio pactado desde el inicio.
+
+## Páginas principales
+
+- [Hipotecas (home)](https://formulahogar.com/): intermediación hipotecaria a precio fijo; cómo funciona, bancos con los que trabaja, preguntas frecuentes y formulario de análisis gratuito.
+- [Alquiler con Opción a Compra](https://formulahogar.com/alquiler-opcion-compra): vive hoy en tu futura casa mientras construyes la entrada mes a mes.
+- [Cesión de Uso](https://formulahogar.com/cesion-de-uso): conviértete en propietario desde el día 1 con solo un 5% de ahorro, transformando el alquiler futuro en entrada actual.
+- [Calculadora de ahorro](https://formulahogar.com/calculadora): calcula la diferencia entre la entrada tradicional (~30%) y la fórmula de FórmulaHogar según comunidad autónoma, precio y edad.
+
+## Legal
+
+- [Aviso legal y privacidad](https://formulahogar.com/politicas)
+- Certificada como Intermediaria de Crédito Inmobiliario por el Banco de España, registro E783.
