@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 
-// TODO: mover a una env var (N8N_HIPOTECAS_WEBHOOK_URL) cuando esté
-// el workflow n8n específico de hipotecas. Por ahora reutilizamos
-// el mismo host de n8n que ya usa /api/viability.
+// Webhook de producción de n8n para leads de hipotecas.
+// Se puede sobreescribir con la env var N8N_HIPOTECAS_WEBHOOK_URL.
 const N8N_HIPOTECAS_WEBHOOK_URL =
   process.env.N8N_HIPOTECAS_WEBHOOK_URL ??
-  "https://n8n.srv954356.hstgr.cloud/webhook-test/hipotecas";
+  "https://n8n.srv954356.hstgr.cloud/webhook/hipotecas";
 
 interface LeadPayload {
   // Paso 1
