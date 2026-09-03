@@ -171,6 +171,9 @@ async function createClickUpTask(
       name: `${(lead.nombre ?? "").trim()} · ${phone}`,
       description: buildDescription(lead, phone, submittedAt),
       status: "pendiente",
+      // Fecha de inicio = momento exacto en que entra el lead (con hora).
+      start_date: new Date(submittedAt).getTime(),
+      start_date_time: true,
       custom_fields: customFields,
     },
     { headers: { Authorization: apiKey, "Content-Type": "application/json" } },
