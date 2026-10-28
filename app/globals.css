@@ -127,3 +127,350 @@ body {
     animation: none !important;
   }
 }
+
+/* ── Fusión (/fusion) ─────────────────────────────────────────── */
+
+.fh-page ::selection {
+  background: #BFFF00;
+  color: #141313;
+}
+
+/* Cifras que cambian: no saltan al recalcular */
+.fh-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Entrada única del hero, escalonada con --fh-delay */
+@keyframes fh-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fh-rise {
+  animation: fh-rise 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--fh-delay, 0ms);
+}
+
+/* Slider de marca: pista de 4 px, relleno en tinta hasta --fh-fill */
+.fh-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 24px;
+  background: transparent;
+  cursor: pointer;
+  --fh-fill: 50%;
+}
+
+.fh-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    #141313 0,
+    #141313 var(--fh-fill),
+    #D6D6D6 var(--fh-fill),
+    #D6D6D6 100%
+  );
+}
+
+.fh-range::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: #D6D6D6;
+}
+
+.fh-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 9999px;
+  background: #141313;
+}
+
+.fh-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -10px;
+  border-radius: 9999px;
+  background: #141313;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 2px 8px rgba(20, 19, 19, 0.25);
+}
+
+.fh-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: #141313;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 2px 8px rgba(20, 19, 19, 0.25);
+}
+
+.fh-range:focus-visible {
+  outline: 3px solid #141313;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.fh-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fh-rise {
+    animation: none;
+  }
+}
+
+/* ── v2 (rediseño en paralelo: /v2 y /v2/fusion) ─────────────────
+   Mundo "dossier": blanco, tinta #141313, lima #BFFF00 como resalte.
+   Libre Baskerville 400 + cursiva verdadera; Manrope para la UI. */
+
+@font-face {
+  font-family: 'Libre Baskerville';
+  src: url('/fonts/LibreBaskerville-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@layer components {
+.v2 {
+  --v2-ink: #141313;
+  --v2-ink-2: #545454;
+  --v2-line: #E8E8E6;
+  --v2-lime: #BFFF00;
+  --v2-lime-hover: #D4FF4D;
+  --v2-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  background: #FFFFFF;
+  color: var(--v2-ink);
+  font-family: 'Manrope', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.v2 ::selection {
+  background: var(--v2-lime);
+  color: var(--v2-ink);
+}
+
+.v2 :focus-visible {
+  outline: 2px solid var(--v2-ink);
+  outline-offset: 3px;
+}
+
+.v2 .v2-dark :focus-visible,
+.v2 .v2-dark:focus-visible {
+  outline-color: var(--v2-lime);
+}
+
+.v2-display {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.v2-it {
+  font-style: italic;
+  letter-spacing: -0.025em;
+}
+
+.v2-h1 {
+  font-size: clamp(2.75rem, 1.35rem + 5.1vw, 6rem);
+  line-height: 1;
+}
+
+.v2-h2 {
+  font-size: clamp(2.25rem, 1.4rem + 3vw, 4.25rem);
+}
+
+.v2-h3 {
+  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+}
+
+.v2-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Barra de sección del dossier: se dibuja al entrar en pantalla */
+.v2-mark {
+  display: block;
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--v2-lime);
+  transform-origin: left center;
+}
+
+.v2-mark[data-tone='ink'] {
+  background: var(--v2-ink);
+}
+
+.v2-js .v2-mark:not(.is-in) {
+  transform: scaleX(0);
+}
+
+.v2-js .v2-mark {
+  transition: transform 900ms var(--v2-ease);
+}
+
+/* Filas que aparecen en secuencia (pasos, listas) */
+.v2-js [data-reveal]:not(.is-in) {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.v2-js [data-reveal] {
+  transition:
+    opacity 700ms var(--v2-ease),
+    transform 700ms var(--v2-ease);
+  transition-delay: var(--v2-delay, 0ms);
+}
+
+/* Entrada única del hero */
+@keyframes v2-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.v2-rise {
+  animation: v2-rise 800ms var(--v2-ease) both;
+  animation-delay: var(--v2-delay, 0ms);
+}
+
+/* Botones píldora */
+.v2-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  border-radius: 9999px;
+  padding: 0 8px 0 24px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--v2-ease),
+    color 200ms var(--v2-ease),
+    border-color 200ms var(--v2-ease);
+}
+
+.v2-btn-arrow {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: var(--v2-ink);
+  color: var(--v2-lime);
+  transition: transform 300ms var(--v2-ease);
+}
+
+.v2-btn:hover .v2-btn-arrow {
+  transform: translateX(3px);
+}
+
+.v2-btn-primary {
+  background: var(--v2-lime);
+  color: var(--v2-ink);
+}
+
+.v2-btn-primary:hover {
+  background: var(--v2-lime-hover);
+}
+
+.v2-btn-ink {
+  background: var(--v2-ink);
+  color: #FFFFFF;
+}
+
+.v2-btn-ink .v2-btn-arrow {
+  background: var(--v2-lime);
+  color: var(--v2-ink);
+}
+
+.v2-btn-ink:hover {
+  background: #2A2929;
+}
+
+.v2-btn-ghost {
+  padding: 0 24px;
+  border: 1px solid rgba(20, 19, 19, 0.18);
+  color: var(--v2-ink);
+}
+
+.v2-btn-ghost:hover {
+  border-color: var(--v2-ink);
+}
+
+.v2-btn-ghost-light {
+  padding: 0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #FFFFFF;
+}
+
+.v2-btn-ghost-light:hover {
+  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.v2-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.v2-btn:disabled .v2-btn-arrow {
+  transform: none;
+}
+
+@media (max-width: 639px) {
+  .v2-btn {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-rise {
+    animation: none;
+  }
+  .v2-js .v2-mark:not(.is-in),
+  .v2-js [data-reveal]:not(.is-in) {
+    transform: none;
+    opacity: 1;
+  }
+  .v2-js .v2-mark,
+  .v2-js [data-reveal],
+  .v2-btn-arrow {
+    transition: none;
+  }
+}
+}
+
+/* Fusión v2: en escritorio cada sección es una pantalla y el scroll se
+   asienta suavemente al principio de cada una (salvo el pie). */
+@media (min-width: 1024px) and (min-height: 680px) and (prefers-reduced-motion: no-preference) {
+  html.v2-snap {
+    scroll-snap-type: y proximity;
+  }
+  html.v2-snap .v2-screen {
+    scroll-snap-align: start;
+  }
+}
